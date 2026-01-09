@@ -299,7 +299,20 @@ namespace AutoDuty.Windows
                             ImGui.PopItemWidth();
 
                             if (Plugin.Configuration.DutyModeEnum != DutyMode.Trust)
+                            {
                                 ImGuiComponents.HelpMarker("Leveling Mode will queue you for the most CONSISTENT dungeon considering your lvl + Ilvl. \nIt will NOT always queue you for the highest level dungeon, it follows our stable dungeon list instead.");
+                                if (Plugin.LevelingEnabled)
+                                {
+                                    bool experimentalEntries = Plugin.Configuration.LevelingListExperimentalEntries;
+                                    if (ImGui.Checkbox("Include Testing/Unstable Dungeons", ref experimentalEntries))
+                                    {
+                                        Plugin.Configuration.LevelingListExperimentalEntries = experimentalEntries;
+                                        Plugin.Configuration.Save();
+                                    }
+
+                                    ImGuiEx.HelpMarker($"Adds more dungeons into the leveling list\nThese dungeons are currently in testing for reliability\nPlease report if you have issues with them");
+                                }
+                            }
                             else
                                 ImGuiComponents.HelpMarker("TRUST Leveling Mode will queue you for the most CONSISTENT dungeon considering your lvl + Ilvl, as well as the LOWEST LEVEL trust members you have, in an attempt to level them all equally.\nIt will NOT always queue you for the highest level dungeon, it follows our stable dungeon list instead.");
                         }
@@ -445,6 +458,8 @@ namespace AutoDuty.Windows
                                                     DutySelected = ContentPathsManager.DictionaryPaths[content.TerritoryType];
                                                     Plugin.CurrentTerritoryContent = content;
                                                     DutySelected.SelectPath(out Plugin.CurrentPath);
+                                                    if (LevelingHelper.levelingListExperimental.Contains(content.TerritoryType))
+                                                        ImGuiEx.HelpMarker("This dungeon is currently in testing for reliability.\nDo report any issues with it");
                                                 }
                                             }
                                         }

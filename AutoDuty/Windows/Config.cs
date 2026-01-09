@@ -718,6 +718,7 @@ public class ConfigurationMain : IEzConfig
                               };
 
                               EzConfig.Save();
+                              LevelingHelper.ResetLevelingDuties();
                           });
     }
 
@@ -914,6 +915,17 @@ public class Configuration
 
         return unsync.Value && this.TreatUnsyncAsW2W;
     }
+
+    public bool LevelingListExperimentalEntries
+    {
+        get;
+        set
+        {
+            if (field != value)
+                LevelingHelper.ResetLevelingDuties();
+            field = value;
+        }
+    } = false;
 
 
     //PreLoop Config Options
