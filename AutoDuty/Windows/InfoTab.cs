@@ -1,6 +1,7 @@
 ﻿using ECommons.ImGuiMethods;
 using ImGuiNET;
 using System.Diagnostics;
+using AutoDuty.Managers;
 
 namespace AutoDuty.Windows
 {
@@ -14,25 +15,24 @@ namespace AutoDuty.Windows
 
         public static void Draw()
         {
-            if (MainWindow.CurrentTabName != "Info")
-                MainWindow.CurrentTabName = "Info";
+            MainWindow.CurrentTabName = Loc.Get("InfoTab.Title");
             ImGui.NewLine();
-            ImGuiEx.TextWrapped("For assistance with general setup for both AutoDuty and it's dependencies, be sure to check out the setup guide below for more information:");
+            ImGuiEx.TextWrapped(Loc.Get("InfoTab.SetupGuideIntro"));
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Information and Setup").X) / 2);
-            if (ImGui.Button("Information and Setup"))
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(Loc.Get("InfoTab.InformationAndSetup")).X) / 2);
+            if (ImGui.Button(Loc.Get("InfoTab.InformationAndSetup")))
                 Process.Start("explorer.exe", infoUrl);
             ImGui.NewLine();
-            ImGuiEx.TextWrapped("The above guide also has information on the status of each path, such as Path maturity, module maturity, and general consistency of each path. You can also review additional notes or considerations, that may need to be made on your part for successful looping. For requests, issues, or contributions to AD, please use the AutoDuty Github to open an issue:");
+            ImGuiEx.TextWrapped(Loc.Get("InfoTab.PathStatusInfo"));
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("GitHub Issues").X) / 2);
-            if (ImGui.Button("GitHub Issues"))
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(Loc.Get("InfoTab.GitHubIssues")).X) / 2);
+            if (ImGui.Button(Loc.Get("InfoTab.GitHubIssues")))
                 Process.Start("explorer.exe", gitIssueUrl);
             ImGui.NewLine();
-            ImGuiEx.TextCentered("For everything else, join the discord!");
+            ImGuiEx.TextCentered(Loc.Get("InfoTab.DiscordInvite"));
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Punish Discord").X) / 2);
-            if (ImGui.Button("Punish Discord"))
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize(Loc.Get("InfoTab.PunishDiscord")).X) / 2);
+            if (ImGui.Button(Loc.Get("InfoTab.PunishDiscord")))
                 Process.Start("explorer.exe", punishDiscordUrl);
             ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("FFXIVCode Discord").X) / 2);
             if (ImGui.Button("FFXIVCode Discord"))

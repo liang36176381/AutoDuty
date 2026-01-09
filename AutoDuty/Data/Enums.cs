@@ -399,7 +399,7 @@ namespace AutoDuty.Data
 
             using (ImRaii.Disabled(!allowRemoval && config.HasFlag(jwr)))
             {
-                if (ImGui.CheckboxFlags(jwr.ToString().Replace("_", " "), ref flag, (int)jwr))
+                if (ImGui.CheckboxFlags(jwr.ToLocalizedString("Jobs"), ref flag, (int)jwr))
                 {
                     config = (JobWithRole)flag;
                     Plugin.Configuration.Save();

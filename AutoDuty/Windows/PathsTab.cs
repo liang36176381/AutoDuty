@@ -14,6 +14,7 @@ using ECommons.GameFunctions;
 using AutoDuty.Managers;
 using ECommons.ImGuiMethods;
 using AutoDuty.Updater;
+using AutoDuty.Managers;
 
 namespace AutoDuty.Windows
 {
@@ -50,29 +51,29 @@ namespace AutoDuty.Windows
         {
             if (MainWindow.CurrentTabName != "Paths")
                 MainWindow.CurrentTabName = "Paths";
-            ImGui.Text($"Path Files");
+            ImGui.Text(Loc.Get("PathsTab.Title"));
             ImGui.Spacing();
             ImGui.Separator();
             ImGui.Spacing();
-            if (ImGui.Button("Open Folder"))
+            if (ImGui.Button(Loc.Get("PathsTab.OpenFolder")))
                 Process.Start("explorer.exe", Plugin.PathsDirectory.FullName);
 
             ImGui.SameLine();
             using (var d = ImRaii.Disabled(_selectedDutyPath == null))
             {
-                if (ImGuiEx.ButtonWrapped("Open File"))
+                if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.OpenFile")))
                     Process.Start("explorer", _selectedDutyPath?.FilePath ?? string.Empty);
             }
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0, 1, 1, 1));
-            if (ImGuiEx.CheckboxWrapped($"Do not overwrite on update", ref _checked))
+            if (ImGuiEx.CheckboxWrapped(Loc.Get("PathsTab.DoNotOverwrite"), ref _checked))
                 CheckBoxOnChange();
 
             ImGui.PopStyleColor();
             ImGui.SameLine();
             using (ImRaii.Disabled(!Plugin.Configuration.PathSelectionsByPath.Any(kvp => kvp.Value.Any())))
             {
-                if (ImGuiEx.ButtonWrapped("Clear all cached jobs"))
+                if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.ClearCachedJobs")))
                 {
                     _selectedDutyPath = null;
                     Plugin.Configuration.PathSelectionsByPath.Clear();
@@ -81,7 +82,7 @@ namespace AutoDuty.Windows
             }
 
             bool anyHeaderOpen = headers.Values.Any(b => b);
-            if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "Collapse All" : "Reveal All"))
+            if (ImGuiEx.ButtonWrapped(Loc.Get(anyHeaderOpen ? "PathsTab.CollapseAll" : "PathsTab.RevealAll")))
             {
                 foreach (uint key in headers.Keys)
                     headers[key] = !anyHeaderOpen;
@@ -89,7 +90,7 @@ namespace AutoDuty.Windows
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
-                if (ImGuiEx.ButtonWrapped("Download Paths"))
+                if (ImGuiEx.ButtonWrapped(Loc.Get("PathsTab.DownloadPaths")))
                     Patcher.Patch(ImGui.IsMouseClicked(ImGuiMouseButton.Right));
             }
             bool showJobSelection = _selectedDutyPath is { container.Paths.Count: > 1 };
@@ -154,6 +155,13 @@ namespace AutoDuty.Windows
                                 showJobSelection = false;
                             }
 
+                            if (path.PathFile == null)
+                            {
+                                ImGui.SameLine(20);
+                                ImGui.TextColored(new(1, 0, 0, 1), Loc.Get("PathsTab.BrokenStatus"));
+                                return;
+                            }
+
                             if (ImGui.IsItemHovered() && path.PathFile.Meta.Notes.Count > 0)
                                 ImGui.SetTooltip(string.Join("\n", path.PathFile.Meta.Notes));
                             ImGui.SetItemAllowOverlap();
@@ -163,7 +171,7 @@ namespace AutoDuty.Windows
                             {
                                 ImGuiHelper.ColoredText(container.ColoredNameRegex, container.Content.Name!);
                                 ImGui.SameLine(0, 0);
-                                ImGui.Text(" => ");
+                                ImGui.Text(Loc.Get("PathsTab.Separator"));
                                 ImGui.SameLine(0, 0);
                             }
 
@@ -222,7 +230,7 @@ namespace AutoDuty.Windows
 
                 ImGui.Text(_selectedDutyPath.Name);
 
-                if (ImGui.Button("Clear job selection for this Duty"))
+                if (ImGui.Button(Loc.Get("PathsTab.ClearJobSelection")))
                 {
                     ImGui.EndChild();
                     ImGui.EndTable();
