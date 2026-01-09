@@ -7,6 +7,7 @@ using System.Linq;
 namespace AutoDuty.Helpers
 {
     using Data;
+    using IPC;
     using static Data.Classes;
 
     internal static class LevelingHelper
@@ -23,11 +24,7 @@ namespace AutoDuty.Helpers
             1039u, // 24 The Thousand Maws of Toto-Rak
             1041u, // 32 Brayflox's Longstop
             1042u, // 41 Stone Vigil
-            1043u, // 50 Castrum Meridianum
-            1064u, // 53 Sohm Al
-            1065u, // 55 The Aery
-            1066u, // 57 The Vault
-            1109u, // 59 The Great Gubal Library
+            
             1142u, // 61 Sirensong Sea
             1144u, // 67 Doma Castle
             1145u, // 69 Castrum Abania
@@ -57,6 +54,23 @@ namespace AutoDuty.Helpers
                 if (levelingDuties.Length <= 0)
                 {
                     IEnumerable<uint> ids = levelingList;
+
+                    if (IPCSubscriber_Common.IsReady("SkipCutscene"))
+                    {
+                        ids = ids.Concat([
+                            1048u, // 45 Porta Decumana
+                        ]);
+                    }
+                    else
+                    {
+                        ids = ids.Concat([
+                            1043u, // 50 Castrum Meridianum
+                            1064u, // 53 Sohm Al
+                            1065u, // 55 The Aery
+                            1066u, // 57 The Vault
+                            1109u, // 59 The Great Gubal Library])
+                        ]);
+                    }
 
                     if (Plugin.Configuration.LevelingListExperimentalEntries)
                         ids = ids.Concat(levelingListExperimental);

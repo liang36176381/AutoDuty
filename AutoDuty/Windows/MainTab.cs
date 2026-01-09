@@ -460,6 +460,9 @@ namespace AutoDuty.Windows
                                                     DutySelected.SelectPath(out Plugin.CurrentPath);
                                                     if (LevelingHelper.levelingListExperimental.Contains(content.TerritoryType))
                                                         ImGuiEx.HelpMarker("This dungeon is currently in testing for reliability.\nDo report any issues with it");
+                                                    if (item.Value.TerritoryType == 1048u)
+                                                        ImGuiEx.HelpMarker("CutsceneSkip detected. Please keep it actually on.");
+
                                                 }
                                             }
                                         }
