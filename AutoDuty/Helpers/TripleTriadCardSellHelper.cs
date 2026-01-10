@@ -17,7 +17,7 @@ namespace AutoDuty.Helpers
 
     internal class TripleTriadCardSellHelper : ActiveHelperBase<TripleTriadCardSellHelper>
     {
-        protected override string Name        { get; } = nameof(TripleTriadCardSellHelper);
+        protected override string Name { get; } = nameof(TripleTriadCardSellHelper);
         protected override string DisplayName { get; } = "Selling TTT Cards";
         protected override string[] AddonsToClose { get; } = ["SelectYesno", "SelectIconString", "TripleTriadCoinExchange", "ShopCardDialog"];
 
@@ -27,7 +27,7 @@ namespace AutoDuty.Helpers
             {
                 Svc.Log.Info("Gold Saucer requires having completed quest: It Could Happen To You");
             }
-            else if(!InventoryHelper.GetInventorySelection(InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4)
+            else if (!InventoryHelper.GetInventorySelection(InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4)
                                    .Any(iv =>
                                         {
                                             Item? excelItem = InventoryHelper.GetExcelItem(iv.ItemId);
@@ -42,15 +42,15 @@ namespace AutoDuty.Helpers
             }
         }
 
-        public const           int         GoldSaucerTerritoryType       = 144;
+        public const int GoldSaucerTerritoryType = 144;
 
-        public static readonly Vector3     TripleTriadCardVendorLocation = new(-56.1f, 1.6f, 16.6f);
+        public static readonly Vector3 TripleTriadCardVendorLocation = new(-56.1f, 1.6f, 16.6f);
         private const uint tripleTriadVendorDataId = 1016294u;
         private static IGameObject? tripleTriadVendorGameObject => ObjectHelper.GetObjectByDataId(tripleTriadVendorDataId);
 
-        private static unsafe AtkUnitBase*                   addonExchange         = null;
-        private static unsafe ReaderTripleTriadCoinExchange? readerExchange        = null;
-        private static unsafe AtkUnitBase*                   addonSelectIconString = null;
+        private static unsafe AtkUnitBase* addonExchange = null;
+        private static unsafe ReaderTripleTriadCoinExchange? readerExchange = null;
+        private static unsafe AtkUnitBase* addonSelectIconString = null;
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
@@ -78,7 +78,7 @@ namespace AutoDuty.Helpers
             }
 
             if (ObjectHelper.GetDistanceToPlayer(TripleTriadCardVendorLocation) > 4 && PlayerHelper.IsReady && VNavmesh_IPCSubscriber.Nav_IsReady() && !VNavmesh_IPCSubscriber.SimpleMove_PathfindInProgress() &&
-                VNavmesh_IPCSubscriber.Path_NumWaypoints()         == 0)
+                VNavmesh_IPCSubscriber.Path_NumWaypoints() == 0)
             {
                 Svc.Log.Debug("Setting Move to Triple Triad Card Trader");
                 MovementHelper.Move(TripleTriadCardVendorLocation, 0.25f, 4f);

@@ -53,7 +53,7 @@ namespace AutoDuty.Helpers
             {
                 if (position != Vector3.Zero)
                     VNavmesh_IPCSubscriber.Path_Stop();
-                
+
                 return true;
             }
 

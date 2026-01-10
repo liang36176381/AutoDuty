@@ -11,8 +11,8 @@ namespace AutoDuty.Helpers
         internal static Vector3 LastPosition = Vector3.Zero;
         internal static long LastPositionUpdate = 0;
 
-        internal static Vector3 LastStuckPosition       = Vector3.Zero;
-        internal static long    LastStuckPositionUpdate = 0;
+        internal static Vector3 LastStuckPosition = Vector3.Zero;
+        internal static long LastStuckPositionUpdate = 0;
 
         private static byte counter = 0;
 
@@ -29,17 +29,17 @@ namespace AutoDuty.Helpers
                 if (Vector3.DistanceSquared(LastPosition, Player.Position) > 1f)
                 {
                     LastPositionUpdate = Environment.TickCount64;
-                    LastPosition       = Player.Position;
+                    LastPosition = Player.Position;
                 }
             }
 
 
             if (Environment.TickCount64 - LastPositionUpdate > Plugin.Configuration.MinStuckTime && EzThrottler.Throttle("RequeueMoveTo", 1000))
             {
-                LastStuckPosition       = Player.Position;
+                LastStuckPosition = Player.Position;
                 LastStuckPositionUpdate = Environment.TickCount64;
 
-                count                   = counter++;
+                count = counter++;
                 Svc.Log.Debug($"Stuck pathfinding: " + count);
                 return true;
             }

@@ -13,7 +13,7 @@ namespace AutoDuty.Helpers
     internal class CofferHelper : ActiveHelperBase<CofferHelper>
     {
         private readonly Dictionary<uint, int> doneItems = [];
-        private          int           initialGearset;
+        private int initialGearset;
 
         internal override unsafe void Start()
         {
@@ -22,7 +22,7 @@ namespace AutoDuty.Helpers
             this.doneItems.Clear();
         }
 
-        protected override string Name        { get; } = nameof(CofferHelper);
+        protected override string Name { get; } = nameof(CofferHelper);
         protected override string DisplayName { get; } = "Opening Coffers";
 
         protected override unsafe void HelperUpdate(IFramework framework)
@@ -49,7 +49,7 @@ namespace AutoDuty.Helpers
 
             this.DebugLog("Checking items");
 
-            IEnumerable <InventoryItem> items = InventoryHelper.GetInventorySelection(InventoryHelper.Bag)
+            IEnumerable<InventoryItem> items = InventoryHelper.GetInventorySelection(InventoryHelper.Bag)
                                                                .Where(iv =>
                                                                       {
                                                                           Item? excelItem = InventoryHelper.GetExcelItem(iv.ItemId);
@@ -59,7 +59,7 @@ namespace AutoDuty.Helpers
 
 
             RaptureGearsetModule* module = RaptureGearsetModule.Instance();
-            
+
             if (items.Any())
             {
                 this.DebugLog("item found");
@@ -71,7 +71,8 @@ namespace AutoDuty.Helpers
                         this.DebugLog("invalid gearset");
                         Plugin.Configuration.AutoOpenCoffersGearset = null;
                         Plugin.Configuration.Save();
-                    } else
+                    }
+                    else
                     {
                         module->EquipGearset(Plugin.Configuration.AutoOpenCoffersGearset.Value);
                         return;
@@ -91,7 +92,8 @@ namespace AutoDuty.Helpers
                 this.DebugLog("item used");
                 this.doneItems[item.ItemId] = item.Quantity;
 
-            } else if (this.initialGearset != module->CurrentGearsetIndex)
+            }
+            else if (this.initialGearset != module->CurrentGearsetIndex)
             {
                 if (!EzThrottler.Throttle("CofferChangeBack", 1000))
                     return;

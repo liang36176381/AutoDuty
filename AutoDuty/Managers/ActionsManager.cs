@@ -221,8 +221,8 @@ namespace AutoDuty.Managers
             Plugin.Action = $"StopForCombat: {action.Arguments[0]}";
             Plugin.StopForCombat = boolTrueFalse;
             _taskManager.Enqueue(() => BossMod_IPCSubscriber.SetMovement(boolTrueFalse), "StopForCombat");
-            if(boolTrueFalse && (action.Arguments.Count <= 1 || action.Arguments[1] != "noWait"))
-                this.Wait(new PathAction {Arguments = ["500"]});
+            if (boolTrueFalse && (action.Arguments.Count <= 1 || action.Arguments[1] != "noWait"))
+                this.Wait(new PathAction { Arguments = ["500"] });
         }
 
         public unsafe void ForceAttack(PathAction action)
@@ -457,7 +457,8 @@ namespace AutoDuty.Managers
                     if (VNavmesh_IPCSubscriber.Path_IsRunning())
                         VNavmesh_IPCSubscriber.Path_Stop();
                     InteractWithObject(gameObject);
-                };
+                }
+                ;
             }
 
             return false;
@@ -533,7 +534,7 @@ namespace AutoDuty.Managers
                 }
                 else if (gameObject == null)
                     _taskManager.Abort();
-                }, "Interactable-InCombatCheck");
+            }, "Interactable-InCombatCheck");
             _taskManager.Enqueue(() => gameObject?.IsTargetable ?? true, "Interactable-WaitGameObjectTargetable");
             _taskManager.Enqueue(() => Interactable(gameObject), "Interactable-InteractableLoop");
         }
@@ -545,10 +546,10 @@ namespace AutoDuty.Managers
             if (!Svc.Condition[ConditionFlag.InCombat])
                 return true;
 
-            
+
             if (EzThrottler.Throttle("PositionalChecker", 25) && ReflectionHelper.Avarice_Reflection.PositionalChanged(out Positional positional))
                 BossMod_IPCSubscriber.SetPositional(positional);
-            
+
             return false;
         }
 
@@ -572,7 +573,7 @@ namespace AutoDuty.Managers
 
             _taskManager.Enqueue(() => MovementHelper.Move(gameObjects[index], 0.25f, 1f), "BossLoot-MoveToChest");
             this.Wait(new PathAction() { Arguments = ["250"] });
-            
+
             _taskManager.Enqueue(() =>
             {
                 index++;
@@ -590,7 +591,7 @@ namespace AutoDuty.Managers
             List<IGameObject>? treasureCofferObjects = null;
             Plugin.SkipTreasureCoffer = false;
             StopForCombat(new PathAction() { Arguments = ["true", "noWait"] });
-            _taskManager.Enqueue(() => BossMoveCheck(action.Position),                           "Boss-MoveCheck");
+            _taskManager.Enqueue(() => BossMoveCheck(action.Position), "Boss-MoveCheck");
             if (Plugin.BossObject == null)
                 _taskManager.Enqueue(() => (Plugin.BossObject = GetBossObject()) != null, "Boss-GetBossObject");
             _taskManager.Enqueue(() => Plugin.Action = $"Boss: {Plugin.BossObject?.Name.TextValue ?? ""}", "Boss-SetActionVar");

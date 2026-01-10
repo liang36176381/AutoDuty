@@ -12,9 +12,9 @@ namespace AutoDuty.Helpers
     internal class GotoInnHelper : ActiveHelperBase<GotoInnHelper>
     {
 
-        protected override string Name        => nameof(GotoInnHelper);
+        protected override string Name => nameof(GotoInnHelper);
         protected override string DisplayName => string.Empty;
-        protected override int    TimeOut     { get; set; } = 600_000;
+        protected override int TimeOut { get; set; } = 600_000;
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno", "SelectString", "Talk"];
 
@@ -33,7 +33,7 @@ namespace AutoDuty.Helpers
         }
 
 
-        internal override void Stop() 
+        internal override void Stop()
         {
             GotoHelper.ForceStop();
             _whichGrandCompany = 0;

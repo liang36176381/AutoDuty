@@ -28,7 +28,7 @@ namespace AutoDuty.Managers
             _taskManager.Enqueue(() => addon = (AtkUnitBase*)Svc.GameGui.GetAddonByName("VVDFinder"), "RegisterVariantDuty");
             _taskManager.Enqueue(() => { if (addon == null) OpenVVD(); }, "RegisterVariantDuty");
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("VVDFinder", out addon) && GenericHelpers.IsAddonReady(addon), "RegisterVariantDuty");
-            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 12, content.VVDIndex+1), "RegisterVariantDuty");
+            _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 12, content.VVDIndex + 1), "RegisterVariantDuty");
             _taskManager.DelayNext("RegisterVariantDuty", 500);
             _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 11, 1), "RegisterVariantDuty");
             _taskManager.DelayNext("RegisterVariantDuty", 500);

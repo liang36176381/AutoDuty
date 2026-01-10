@@ -94,7 +94,7 @@ public sealed class AutoDuty : IDalamudPlugin
     internal Configuration Configuration => ConfigurationMain.Instance.GetCurrentConfig;
     internal WindowSystem WindowSystem = new("AutoDuty");
 
-    public   int   Version { get; set; }
+    public int Version { get; set; }
     internal Stage PreviousStage = Stage.Stopped;
     internal Stage Stage
     {
@@ -198,12 +198,12 @@ public sealed class AutoDuty : IDalamudPlugin
     private IGameObject? treasureCofferGameObject = null;
     //private readonly TinyMessageBus _messageBusSend = new("AutoDutyBroadcaster");
     //private readonly TinyMessageBus _messageBusReceive = new("AutoDutyBroadcaster");
-    private         bool           _recentlyWatchedCutscene = false;
-    private         bool           _lootTreasure;
-    private         SettingsActive _settingsActive         = SettingsActive.None;
-    private         SettingsActive _bareModeSettingsActive = SettingsActive.None;
-    private         DateTime       _lastRotationSetTime    = DateTime.MinValue;
-    public readonly bool           isDev;
+    private bool _recentlyWatchedCutscene = false;
+    private bool _lootTreasure;
+    private SettingsActive _settingsActive = SettingsActive.None;
+    private SettingsActive _bareModeSettingsActive = SettingsActive.None;
+    private DateTime _lastRotationSetTime = DateTime.MinValue;
+    public readonly bool isDev;
 
     public AutoDuty()
     {
@@ -222,7 +222,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
 
             //Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-            
+
             ConfigTab.BuildManuals();
             _configDirectory = PluginInterface.ConfigDirectory;
             ConfigFile = PluginInterface.ConfigFile;
@@ -230,9 +230,9 @@ public sealed class AutoDuty : IDalamudPlugin
             PathsDirectory = new(_configDirectory.FullName + "/paths");
             AssemblyFileInfo = PluginInterface.AssemblyLocation;
             AssemblyDirectoryInfo = AssemblyFileInfo.Directory;
-            
-            Version = 
-                ((PluginInterface.IsDev     ? new Version(0,0,0, 229) :
+
+            Version =
+                ((PluginInterface.IsDev ? new Version(0, 0, 0, 229) :
                   PluginInterface.IsTesting ? PluginInterface.Manifest.TestingAssemblyVersion ?? PluginInterface.Manifest.AssemblyVersion : PluginInterface.Manifest.AssemblyVersion)!).Revision;
 
             if (!_configDirectory.Exists)
@@ -267,9 +267,9 @@ public sealed class AutoDuty : IDalamudPlugin
             WindowSystem.AddWindow(MainWindow);
             WindowSystem.AddWindow(Overlay);
 
-            if (Svc.ClientState.IsLoggedIn) 
+            if (Svc.ClientState.IsLoggedIn)
                 this.ClientStateOnLogin();
-             
+
             Svc.Commands.AddHandler("/ad", new CommandInfo(OnCommand) { });
             Svc.Commands.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
@@ -346,10 +346,10 @@ public sealed class AutoDuty : IDalamudPlugin
 
                 if (Plugin.Configuration.PathDrawEnabled && CurrentTerritoryContent?.TerritoryType == Svc.ClientState.TerritoryType && this.Actions.Any() && (this.Indexer < 0 || !this.Actions[this.Indexer].Name.Equals("Boss") || Stage != Stage.Action))
                 {
-                    Vector3 lastPos         = Player.Position;
-                    float   stepCountFactor = (1f / this.Configuration.PathDrawStepCount);
+                    Vector3 lastPos = Player.Position;
+                    float stepCountFactor = (1f / this.Configuration.PathDrawStepCount);
 
-                    for (int index = Math.Clamp(this.Indexer, 0, this.Actions.Count-1); index < this.Actions.Count; index++)
+                    for (int index = Math.Clamp(this.Indexer, 0, this.Actions.Count - 1); index < this.Actions.Count; index++)
                     {
                         PathAction action = this.Actions[index];
                         if (action.Position.LengthSquared() > 1)
@@ -440,11 +440,11 @@ public sealed class AutoDuty : IDalamudPlugin
         }
     }
 
-    private unsafe bool StopLoop => Configuration.EnableTerminationActions && 
+    private unsafe bool StopLoop => Configuration.EnableTerminationActions &&
                                         (CurrentTerritoryContent == null ||
                                         (Configuration.StopLevel && Player.Level >= Configuration.StopLevelInt) ||
                                         (Configuration.StopNoRestedXP && AgentHUD.Instance()->ExpRestedExperience == 0) ||
-                                        (Configuration.StopItemQty && (Configuration.StopItemAll 
+                                        (Configuration.StopItemQty && (Configuration.StopItemAll
                                             ? Configuration.StopItemQtyItemDictionary.All(x => InventoryManager.Instance()->GetInventoryItemCount(x.Key) >= x.Value.Value)
                                             : Configuration.StopItemQtyItemDictionary.Any(x => InventoryManager.Instance()->GetInventoryItemCount(x.Key) >= x.Value.Value))));
 
@@ -466,8 +466,8 @@ public sealed class AutoDuty : IDalamudPlugin
 
         Svc.Log.Debug($"ClientState_TerritoryChanged: t={t}");
 
-        CurrentTerritoryType         = t;
-        MainListClicked              = false;
+        CurrentTerritoryType = t;
+        MainListClicked = false;
         this.Framework_Update_InDuty = _ => { };
         if (t == 0)
             return;
@@ -522,9 +522,9 @@ public sealed class AutoDuty : IDalamudPlugin
             }
             else
             {
-                TaskManager.Enqueue(() => Svc.Log.Debug($"Loops Done"),                                                                                         "Loop-Debug");
-                TaskManager.Enqueue(() => { States &= ~PluginState.Navigating; },                                                                               "Loop-RemoveNavigationState");
-                TaskManager.Enqueue(() => PlayerHelper.IsReady,                                                                                                 int.MaxValue, "Loop-WaitPlayerReady");
+                TaskManager.Enqueue(() => Svc.Log.Debug($"Loops Done"), "Loop-Debug");
+                TaskManager.Enqueue(() => { States &= ~PluginState.Navigating; }, "Loop-RemoveNavigationState");
+                TaskManager.Enqueue(() => PlayerHelper.IsReady, int.MaxValue, "Loop-WaitPlayerReady");
                 TaskManager.Enqueue(() => Svc.Log.Debug($"Loop {CurrentLoop} == {Configuration.LoopTimes} we are done Looping, Invoking LoopsCompleteActions"), "Loop-Debug");
                 TaskManager.Enqueue(() =>
                                     {
@@ -532,7 +532,7 @@ public sealed class AutoDuty : IDalamudPlugin
                                             this.LoopTasks(false);
                                         else
                                             this.LoopsCompleteActions();
-                                    },     "Loop-LoopCompleteActions");
+                                    }, "Loop-LoopCompleteActions");
             }
         }
     }
@@ -664,7 +664,7 @@ public sealed class AutoDuty : IDalamudPlugin
             Queue(CurrentTerritoryContent);
         }
         TaskManager.Enqueue(() => Svc.Log.Debug($"Done Queueing-WaitDutyStarted, NavIsReady"));
-        TaskManager.Enqueue(() => Svc.DutyState.IsDutyStarted,          "Run-WaitDutyStarted");
+        TaskManager.Enqueue(() => Svc.DutyState.IsDutyStarted, "Run-WaitDutyStarted");
         TaskManager.Enqueue(() => VNavmesh_IPCSubscriber.Nav_IsReady(), int.MaxValue, "Run-WaitNavIsReady");
         TaskManager.Enqueue(() => Svc.Log.Debug($"Start Navigation"));
         TaskManager.Enqueue(() => StartNavigation(startFromZero), "Run-StartNavigation");
@@ -685,7 +685,7 @@ public sealed class AutoDuty : IDalamudPlugin
                 TaskManager.DelayNext("Loop-DelayAfterCommands", 1000);
             }
 
-            if (Configuration.AutoOpenCoffers) 
+            if (Configuration.AutoOpenCoffers)
                 EnqueueActiveHelper<CofferHelper>();
 
             if (Configuration.EnableAutoRetainer && AutoRetainer_IPCSubscriber.IsEnabled && AutoRetainer_IPCSubscriber.AreAnyRetainersAvailableForCurrentChara())
@@ -709,13 +709,13 @@ public sealed class AutoDuty : IDalamudPlugin
 
             AutoEquipRecommendedGear();
 
-            if (Configuration.AutoRepair && InventoryHelper.CanRepair()) 
+            if (Configuration.AutoRepair && InventoryHelper.CanRepair())
                 EnqueueActiveHelper<RepairHelper>();
 
-            if (Configuration.AutoExtract && QuestManager.IsQuestComplete(66174)) 
+            if (Configuration.AutoExtract && QuestManager.IsQuestComplete(66174))
                 EnqueueActiveHelper<ExtractHelper>();
 
-            if (Configuration.AutoDesynth) 
+            if (Configuration.AutoDesynth)
                 EnqueueActiveHelper<DesynthHelper>();
 
             if (Configuration.AutoGCTurnin && (!Configuration.AutoGCTurninSlotsLeftBool || InventoryManager.Instance()->GetEmptySlotsInBag() <= Configuration.AutoGCTurninSlotsLeft) && PlayerHelper.GetGrandCompanyRank() > 5)
@@ -723,13 +723,13 @@ public sealed class AutoDuty : IDalamudPlugin
 
             if (Configuration.TripleTriadEnabled)
             {
-                if (Configuration.TripleTriadRegister) 
+                if (Configuration.TripleTriadRegister)
                     EnqueueActiveHelper<TripleTriadCardUseHelper>();
-                if (Configuration.TripleTriadSell) 
+                if (Configuration.TripleTriadSell)
                     EnqueueActiveHelper<TripleTriadCardSellHelper>();
             }
 
-            if (Configuration.DiscardItems) 
+            if (Configuration.DiscardItems)
                 EnqueueActiveHelper<DiscardHelper>();
 
             if (Configuration.DutyModeEnum != DutyMode.Squadron && Configuration.RetireMode)
@@ -773,14 +773,14 @@ public sealed class AutoDuty : IDalamudPlugin
             {
                 if (this.LevelingModeEnum == LevelingMode.Support && Configuration.PreferTrustOverSupportLeveling && duty.ClassJobLevelRequired > 70)
                 {
-                    levelingModeEnum           = LevelingMode.Trust;
+                    levelingModeEnum = LevelingMode.Trust;
                     Configuration.dutyModeEnum = DutyMode.Trust;
 
                     Content? dutyTrust = LevelingHelper.SelectHighestLevelingRelevantDuty(true);
 
                     if (duty != dutyTrust)
                     {
-                        levelingModeEnum           = LevelingMode.Support;
+                        levelingModeEnum = LevelingMode.Support;
                         Configuration.dutyModeEnum = DutyMode.Support;
                     }
                 }
@@ -897,8 +897,8 @@ public sealed class AutoDuty : IDalamudPlugin
 
         Svc.Log.Debug($"Removing Looping, Setting CurrentLoop to 0, and Setting Stage to Stopped");
 
-        States      &= ~PluginState.Looping;
-        CurrentLoop =  0;
+        States &= ~PluginState.Looping;
+        CurrentLoop = 0;
         TaskManager.Enqueue(() => SchedulerHelper.ScheduleAction("SetStageStopped", () => Stage = Stage.Stopped, 1));
     }
 
@@ -1104,10 +1104,10 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         if (Indexer == -1 || Indexer >= Actions.Count)
             return;
-        
+
         if (this.Configuration is { AutoManageRotationPluginState: true, UsingAlternativeRotationPlugin: false } && !Svc.Condition[ConditionFlag.OccupiedInCutSceneEvent])
             SetRotationPluginSettings(true);
-        
+
         if (!TaskManager.IsBusy)
         {
             Stage = Stage.Reading_Path;
@@ -1123,7 +1123,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
         Action = $"Waiting For Combat";
 
-        
+
         if (ReflectionHelper.Avarice_Reflection.PositionalChanged(out Positional positional) && !Plugin.Configuration.UsingAlternativeBossPlugin && IPCSubscriber_Common.IsReady("BossModReborn"))
             BossMod_IPCSubscriber.SetPositional(positional);
 
@@ -1212,7 +1212,7 @@ public sealed class AutoDuty : IDalamudPlugin
 
         if (this.Configuration is { AutoManageBossModAISettings: true, BM_UpdatePresetsAutomatically: true })
         {
-            BossMod_IPCSubscriber.RefreshPreset("AutoDuty",         Resources.AutoDutyPreset);
+            BossMod_IPCSubscriber.RefreshPreset("AutoDuty", Resources.AutoDutyPreset);
             BossMod_IPCSubscriber.RefreshPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
         }
 
@@ -1248,7 +1248,7 @@ public sealed class AutoDuty : IDalamudPlugin
         //we finished lets exit the duty or stop
         if ((Configuration.AutoExitDuty || CurrentLoop < Configuration.LoopTimes))
         {
-            if (!Stage.EqualsAny(Stage.Stopped, Stage.Paused)                                     &&
+            if (!Stage.EqualsAny(Stage.Stopped, Stage.Paused) &&
                 (!Configuration.OnlyExitWhenDutyDone || this.DutyState == DutyState.DutyComplete) &&
                 !this.States.HasFlag(PluginState.Navigating))
             {
@@ -1256,7 +1256,7 @@ public sealed class AutoDuty : IDalamudPlugin
                     ExitDuty();
                 if (Configuration.AutoManageRotationPluginState && !Configuration.UsingAlternativeRotationPlugin)
                     SetRotationPluginSettings(false);
-                if (Configuration.AutoManageBossModAISettings) 
+                if (Configuration.AutoManageBossModAISettings)
                     BossMod_IPCSubscriber.DisablePresets();
             }
         }
@@ -1306,13 +1306,13 @@ public sealed class AutoDuty : IDalamudPlugin
         // Only try to set the rotation state every few seconds
         if (on && (DateTime.Now - _lastRotationSetTime).TotalSeconds < 5 && !ignoreTimer)
             return;
-        
-        if(on)
+
+        if (on)
             _lastRotationSetTime = DateTime.Now;
 
         if (!ignoreConfig && !this.Configuration.AutoManageRotationPluginState)
             return;
-        bool bmEnabled     = BossMod_IPCSubscriber.IsEnabled;
+        bool bmEnabled = BossMod_IPCSubscriber.IsEnabled;
         bool foundRotation = false;
 
         if (Wrath_IPCSubscriber.IsEnabled)
@@ -1356,12 +1356,12 @@ public sealed class AutoDuty : IDalamudPlugin
                 {
                     BossMod_IPCSubscriber.SetPreset("AutoDuty", Resources.AutoDutyPreset);
                 }
-                else if(this.Configuration.AutoManageBossModAISettings)
+                else if (this.Configuration.AutoManageBossModAISettings)
                 {
                     BossMod_IPCSubscriber.SetPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
                 }
-            } 
-            else if(!foundRotation || this.Configuration.AutoManageBossModAISettings)
+            }
+            else if (!foundRotation || this.Configuration.AutoManageBossModAISettings)
             {
                 BossMod_IPCSubscriber.DisablePresets();
             }
@@ -1392,7 +1392,7 @@ public sealed class AutoDuty : IDalamudPlugin
         }
 
         //RoleBased MaxDistanceToTarget
-        float maxDistanceToTarget = (Player.Object.ClassJob.Value.GetJobRole() is JobRole.Melee or JobRole.Tank ? 
+        float maxDistanceToTarget = (Player.Object.ClassJob.Value.GetJobRole() is JobRole.Melee or JobRole.Tank ?
                                          Plugin.Configuration.MaxDistanceToTargetRoleMelee : Plugin.Configuration.MaxDistanceToTargetRoleRanged);
         if (PlayerHelper.IsValid && Configuration.MaxDistanceToTargetRoleBased && Math.Abs(this.Configuration.MaxDistanceToTargetFloat - maxDistanceToTarget) > 0.01f)
         {
@@ -1473,7 +1473,7 @@ public sealed class AutoDuty : IDalamudPlugin
             return;
 
         if (Svc.Condition[ConditionFlag.OccupiedSummoningBell])
-            while(!AutoRetainerHelper.Instance.CloseAddons());
+            while (!AutoRetainerHelper.Instance.CloseAddons()) ;
     }
 
     private void InteractablesCheck()
@@ -1557,7 +1557,7 @@ public sealed class AutoDuty : IDalamudPlugin
         }
     }
 
-    public event IFramework.OnUpdateDelegate Framework_Update_InDuty = _ => {};
+    public event IFramework.OnUpdateDelegate Framework_Update_InDuty = _ => { };
 
     private void StopAndResetALL()
     {
@@ -1571,11 +1571,11 @@ public sealed class AutoDuty : IDalamudPlugin
         States = PluginState.None;
         TaskManager?.SetStepMode(false);
         TaskManager?.Abort();
-        MainListClicked              = false;
-        this.Framework_Update_InDuty = _ => {};
+        MainListClicked = false;
+        this.Framework_Update_InDuty = _ => { };
         if (!InDungeon)
             CurrentLoop = 0;
-        if (Configuration.AutoManageBossModAISettings) 
+        if (Configuration.AutoManageBossModAISettings)
             BossMod_IPCSubscriber.DisablePresets();
 
         SetGeneralSettings(true);
@@ -1598,7 +1598,7 @@ public sealed class AutoDuty : IDalamudPlugin
         if (DeathHelper.DeathState == PlayerLifeState.Revived)
             DeathHelper.Stop();
 
-        foreach (IActiveHelper helper in ActiveHelper.activeHelpers) 
+        foreach (IActiveHelper helper in ActiveHelper.activeHelpers)
             helper.StopIfRunning();
 
 
@@ -1610,9 +1610,9 @@ public sealed class AutoDuty : IDalamudPlugin
     {
         GitHubHelper.Dispose();
         StopAndResetALL();
-        ConfigurationMain.Instance.MultiBox =  false;
-        Svc.Framework.Update                -= Framework_Update;
-        Svc.Framework.Update                -= SchedulerHelper.ScheduleInvoker;
+        ConfigurationMain.Instance.MultiBox = false;
+        Svc.Framework.Update -= Framework_Update;
+        Svc.Framework.Update -= SchedulerHelper.ScheduleInvoker;
         FileHelper.FileSystemWatcher.Dispose();
         FileHelper.FileWatcher.Dispose();
         WindowSystem.RemoveAllWindows();
@@ -1620,16 +1620,16 @@ public sealed class AutoDuty : IDalamudPlugin
         MainWindow.Dispose();
         OverrideCamera.Dispose();
         Svc.ClientState.TerritoryChanged -= ClientState_TerritoryChanged;
-        Svc.Condition.ConditionChange    -= Condition_ConditionChange;
+        Svc.Condition.ConditionChange -= Condition_ConditionChange;
         PictoService.Dispose();
-        PluginInterface.UiBuilder.Draw   -= UiBuilderOnDraw;
+        PluginInterface.UiBuilder.Draw -= UiBuilderOnDraw;
         Svc.Commands.RemoveHandler(CommandName);
     }
 
     private unsafe void OnCommand(string command, string args)
     {
         // in response to the slash command
-        Match        match   = RegexHelper.ArgumentParserRegex().Match(args.ToLower());
+        Match match = RegexHelper.ArgumentParserRegex().Match(args.ToLower());
         List<string> matches = [];
 
         while (match.Success)
@@ -1663,7 +1663,7 @@ public sealed class AutoDuty : IDalamudPlugin
                 if (Plugin.Stage == Stage.Paused)
                 {
                     Plugin.TaskManager.SetStepMode(false);
-                    Plugin.Stage  =  Plugin.PreviousStage;
+                    Plugin.Stage = Plugin.PreviousStage;
                     Plugin.States &= ~PluginState.Paused;
                 }
                 break;
@@ -1749,7 +1749,7 @@ public sealed class AutoDuty : IDalamudPlugin
                 if (argsArray.Length == 1)
                 {
                     this.Configuration.ShowOverlay = true;
-                    this.Overlay.IsOpen            = true;
+                    this.Overlay.IsOpen = true;
 
                     if (!Plugin.States.HasAnyFlag(PluginState.Looping, PluginState.Navigating))
                         this.Configuration.HideOverlayWhenStopped = false;
@@ -1846,51 +1846,92 @@ public sealed class AutoDuty : IDalamudPlugin
                 if (spewObj == null) return;
 
                 GameObject gObj = *spewObj.Struct();
-                try { Svc.Log.Info($"Spewing Object Information for: {gObj.NameString}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Spewing Object Information for: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"Spewing Object Information for: {gObj.NameString}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"Spewing Object Information for: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
                 //DrawObject: {gObj.DrawObject}\n
                 //LayoutInstance: { gObj.LayoutInstance}\n
                 //EventHandler: { gObj.EventHandler}\n
                 //LuaActor: {gObj.LuaActor}\n
-                try { Svc.Log.Info($"DefaultPosition: {gObj.DefaultPosition}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"DefaultRotation: {gObj.DefaultRotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"EventState: {gObj.EventState}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"EntityId {gObj.EntityId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"LayoutId: {gObj.LayoutId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"BaseId {gObj.BaseId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"OwnerId: {gObj.OwnerId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"ObjectIndex: {gObj.ObjectIndex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"ObjectKind {gObj.ObjectKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"SubKind: {gObj.SubKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Sex: {gObj.Sex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"YalmDistanceFromPlayerX: {gObj.YalmDistanceFromPlayerX}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"TargetStatus: {gObj.TargetStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"YalmDistanceFromPlayerZ: {gObj.YalmDistanceFromPlayerZ}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"TargetableStatus: {gObj.TargetableStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Position: {gObj.Position}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Rotation: {gObj.Rotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Scale: {gObj.Scale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"Height: {gObj.Height}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"VfxScale: {gObj.VfxScale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"HitboxRadius: {gObj.HitboxRadius}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"DrawOffset: {gObj.DrawOffset}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"EventId: {gObj.EventId.Id}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"FateId: {gObj.FateId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"NamePlateIconId: {gObj.NamePlateIconId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"RenderFlags: {gObj.RenderFlags}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetGameObjectId().ObjectId: {gObj.GetGameObjectId().ObjectId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetGameObjectId().Type: {gObj.GetGameObjectId().Type}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetObjectKind: {gObj.GetObjectKind()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetIsTargetable: {gObj.GetIsTargetable()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetName: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetRadius: {gObj.GetRadius()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetHeight: {gObj.GetHeight()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetDrawObject: {*gObj.GetDrawObject()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"GetNameId: {gObj.GetNameId()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsDead: {gObj.IsDead()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsNotMounted: {gObj.IsNotMounted()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsCharacter: {gObj.IsCharacter()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
-                try { Svc.Log.Info($"IsReadyToDraw: {gObj.IsReadyToDraw()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); };
+                try { Svc.Log.Info($"DefaultPosition: {gObj.DefaultPosition}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"DefaultRotation: {gObj.DefaultRotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"EventState: {gObj.EventState}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"EntityId {gObj.EntityId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"LayoutId: {gObj.LayoutId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"BaseId {gObj.BaseId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"OwnerId: {gObj.OwnerId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"ObjectIndex: {gObj.ObjectIndex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"ObjectKind {gObj.ObjectKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"SubKind: {gObj.SubKind}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"Sex: {gObj.Sex}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"YalmDistanceFromPlayerX: {gObj.YalmDistanceFromPlayerX}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"TargetStatus: {gObj.TargetStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"YalmDistanceFromPlayerZ: {gObj.YalmDistanceFromPlayerZ}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"TargetableStatus: {gObj.TargetableStatus}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"Position: {gObj.Position}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"Rotation: {gObj.Rotation}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"Scale: {gObj.Scale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"Height: {gObj.Height}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"VfxScale: {gObj.VfxScale}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"HitboxRadius: {gObj.HitboxRadius}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"DrawOffset: {gObj.DrawOffset}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"EventId: {gObj.EventId.Id}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"FateId: {gObj.FateId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"NamePlateIconId: {gObj.NamePlateIconId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"RenderFlags: {gObj.RenderFlags}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetGameObjectId().ObjectId: {gObj.GetGameObjectId().ObjectId}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetGameObjectId().Type: {gObj.GetGameObjectId().Type}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetObjectKind: {gObj.GetObjectKind()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetIsTargetable: {gObj.GetIsTargetable()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetName: {gObj.GetName()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetRadius: {gObj.GetRadius()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetHeight: {gObj.GetHeight()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetDrawObject: {*gObj.GetDrawObject()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"GetNameId: {gObj.GetNameId()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"IsDead: {gObj.IsDead()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"IsNotMounted: {gObj.IsNotMounted()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"IsCharacter: {gObj.IsCharacter()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
+                try { Svc.Log.Info($"IsReadyToDraw: {gObj.IsReadyToDraw()}"); } catch (Exception ex) { Svc.Log.Info($": {ex}"); }
+                ;
                 break;
             default:
                 OpenMainUI();

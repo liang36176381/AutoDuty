@@ -54,8 +54,8 @@ public class ConfigurationMain : IEzConfig
 
     [JsonProperty]
     private string activeProfileName = CONFIGNAME_BARE;
-    
-    public  string ActiveProfileName => this.activeProfileName;
+
+    public string ActiveProfileName => this.activeProfileName;
 
     [JsonProperty]
     private readonly HashSet<ProfileData> profileData = [];
@@ -69,9 +69,9 @@ public class ConfigurationMain : IEzConfig
     [JsonObject(MemberSerialization.OptOut)]
     public struct CharData
     {
-        public required ulong  CID;
-        public          string Name;
-        public          string World;
+        public required ulong CID;
+        public string Name;
+        public string World;
 
         public string GetName() => this.Name.Any() ? $"{this.Name}@{this.World}" : CID.ToString();
 
@@ -106,22 +106,22 @@ public class ConfigurationMain : IEzConfig
 
     public class MultiboxUtility
     {
-        private const int    BUFFER_SIZE            = 4096;
-        private const string PIPE_NAME              = "AutoDutyPipe";
+        private const int BUFFER_SIZE = 4096;
+        private const string PIPE_NAME = "AutoDutyPipe";
 
-        private const string SERVER_AUTH_KEY        = "AD Server Auth!";
-        private const string CLIENT_AUTH_KEY        = "AD Client Auth!";
-        private const string CLIENT_CID_KEY  = "CLIENT CID";
+        private const string SERVER_AUTH_KEY = "AD Server Auth!";
+        private const string CLIENT_AUTH_KEY = "AD Client Auth!";
+        private const string CLIENT_CID_KEY = "CLIENT CID";
 
-        private const string KEEPALIVE_KEY          = "KEEP_ALIVE";
+        private const string KEEPALIVE_KEY = "KEEP_ALIVE";
         private const string KEEPALIVE_RESPONSE_KEY = "KEEP_ALIVE received";
 
-        private const string DEATH_KEY   = "DEATH";
+        private const string DEATH_KEY = "DEATH";
         private const string UNDEATH_KEY = "UNDEATH";
         private const string DEATH_RESET_KEY = "DEATH_RESET";
 
         private const string STEP_COMPLETED = "STEP_COMPLETED";
-        private const string STEP_START     = "STEP_START";
+        private const string STEP_START = "STEP_START";
 
         private static bool stepBlock = false;
         public static bool MultiboxBlockingNextStep
@@ -147,7 +147,7 @@ public class ConfigurationMain : IEzConfig
 
                 stepBlock = value;
 
-                if(stepBlock)
+                if (stepBlock)
                     if (Instance.host)
                     {
                         Plugin.Action = "Waiting for clients";
@@ -165,7 +165,7 @@ public class ConfigurationMain : IEzConfig
             if (Instance.MultiBox)
                 return;
 
-            if(!Instance.host)
+            if (!Instance.host)
                 Client.SendDeath(dead);
             else
                 Server.CheckDeaths();
@@ -181,14 +181,14 @@ public class ConfigurationMain : IEzConfig
 
         internal static class Server
         {
-            public const             int             MAX_SERVERS = 3;
-            private static readonly  Thread?[]       threads     = new Thread?[MAX_SERVERS];
-            private static readonly  StreamString?[] streams     = new StreamString?[MAX_SERVERS];
-            internal static readonly ulong?[]        cids        = new ulong?[MAX_SERVERS];
+            public const int MAX_SERVERS = 3;
+            private static readonly Thread?[] threads = new Thread?[MAX_SERVERS];
+            private static readonly StreamString?[] streams = new StreamString?[MAX_SERVERS];
+            internal static readonly ulong?[] cids = new ulong?[MAX_SERVERS];
 
-            internal static readonly DateTime[] keepAlives    = new DateTime[MAX_SERVERS];
-            private static readonly  bool[]     stepConfirms  = new bool[MAX_SERVERS];
-            private static readonly  bool[]     deathConfirms = new bool[MAX_SERVERS];
+            internal static readonly DateTime[] keepAlives = new DateTime[MAX_SERVERS];
+            private static readonly bool[] stepConfirms = new bool[MAX_SERVERS];
+            private static readonly bool[] deathConfirms = new bool[MAX_SERVERS];
 
             private static readonly NamedPipeServerStream?[] pipes = new NamedPipeServerStream[MAX_SERVERS];
 
@@ -215,7 +215,7 @@ public class ConfigurationMain : IEzConfig
                             threads[i] = null;
                             streams[i] = null;
 
-                            keepAlives[i]   = DateTime.MinValue;
+                            keepAlives[i] = DateTime.MinValue;
                             stepConfirms[i] = false;
                         }
                     }
@@ -255,8 +255,8 @@ public class ConfigurationMain : IEzConfig
 
                     while (pipes[index]?.IsConnected ?? false)
                     {
-                        string   message = ss.ReadString().Trim();
-                        string[] split   = message.Split("|");
+                        string message = ss.ReadString().Trim();
+                        string[] split = message.Split("|");
 
 
                         switch (split[0])
@@ -319,7 +319,7 @@ public class ConfigurationMain : IEzConfig
 
             public static void CheckStepProgress()
             {
-                if(Plugin.Indexer >= 0 && Plugin.Indexer < Plugin.Actions.Count && Plugin.Actions[Plugin.Indexer].Tag == ActionTag.Treasure || stepConfirms.All(x => x) && stepBlock)
+                if (Plugin.Indexer >= 0 && Plugin.Indexer < Plugin.Actions.Count && Plugin.Actions[Plugin.Indexer].Tag == ActionTag.Treasure || stepConfirms.All(x => x) && stepBlock)
                 {
                     for (int i = 0; i < stepConfirms.Length; i++)
                         stepConfirms[i] = false;
@@ -341,16 +341,16 @@ public class ConfigurationMain : IEzConfig
 
             private static void SendToAllClients(string message)
             {
-                foreach (StreamString? ss in streams) 
+                foreach (StreamString? ss in streams)
                     ss?.WriteString(message);
             }
         }
 
         private static class Client
         {
-            private static Thread?                thread;
+            private static Thread? thread;
             private static NamedPipeClientStream? pipe;
-            private static StreamString?          clientSS;
+            private static StreamString? clientSS;
 
             public static void Set(bool on)
             {
@@ -364,7 +364,7 @@ public class ConfigurationMain : IEzConfig
                     pipe?.Close();
                     pipe?.Dispose();
                     clientSS = null;
-                    thread   = null;
+                    thread = null;
                 }
             }
 
@@ -386,15 +386,15 @@ public class ConfigurationMain : IEzConfig
                     {
                         clientSS.WriteString(CLIENT_AUTH_KEY);
 
-                        if(Player.Available)
+                        if (Player.Available)
                             clientSS.WriteString($"{CLIENT_CID_KEY}|{Player.CID}");
 
                         new Thread(ClientKeepAliveThread).Start();
 
                         while (pipe?.IsConnected ?? false)
                         {
-                            string   message = clientSS.ReadString().Trim();
-                            string[] split   = message.Split("|");
+                            string message = clientSS.ReadString().Trim();
+                            string[] split = message.Split("|");
 
                             switch (split[0])
                             {
@@ -402,7 +402,7 @@ public class ConfigurationMain : IEzConfig
                                     if (int.TryParse(split[1], out int step))
                                     {
                                         Plugin.Indexer = step;
-                                        stepBlock      = false;
+                                        stepBlock = false;
                                     }
                                     break;
                                 case KEEPALIVE_RESPONSE_KEY:
@@ -488,15 +488,15 @@ public class ConfigurationMain : IEzConfig
                 int b1 = this.ioStream.ReadByte();
                 int b2 = this.ioStream.ReadByte();
 
-                if(b1 == -1)
+                if (b1 == -1)
                 {
                     DebugLog("End of stream reached.");
                     return string.Empty;
                 }
 
-                int    len      = b1 * 256 + b2;
+                int len = b1 * 256 + b2;
                 byte[] inBuffer = new byte[len];
-                this.ioStream.Read(inBuffer, 0, len);
+                ioStream.ReadExactly(inBuffer, 0, len);
                 string readString = this.streamEncoding.GetString(inBuffer);
 
                 DebugLog("Reading: " + readString);
@@ -525,7 +525,7 @@ public class ConfigurationMain : IEzConfig
     }
 
     public IEnumerable<string> ConfigNames => this.profileByName.Keys;
-     
+
     public ProfileData GetCurrentProfile
     {
         get
@@ -564,25 +564,25 @@ public class ConfigurationMain : IEzConfig
                     this.profileByCID[cid] = profile.Name;
             this.profileByName[profile.Name] = profile;
 
-            if(profile.Config.LootMethodEnum == LootMethod.RotationSolver) //RSR removed
+            if (profile.Config.LootMethodEnum == LootMethod.RotationSolver) //RSR removed
                 profile.Config.LootMethodEnum = LootMethod.All;
         }
 
         foreach (ProfileData profile in this.profileData)
-            if(profile.Name != CONFIGNAME_BARE)
+            if (profile.Name != CONFIGNAME_BARE)
                 RegisterProfileData(profile);
 
         RegisterProfileData(new ProfileData
-                            {
-                                Name = CONFIGNAME_BARE,
-                                Config = new Configuration
-                                         {
-                                             EnablePreLoopActions     = false,
-                                             EnableBetweenLoopActions = false,
-                                             EnableTerminationActions = false,
-                                             LootTreasure             = false
-                                         }
-                            });
+        {
+            Name = CONFIGNAME_BARE,
+            Config = new Configuration
+            {
+                EnablePreLoopActions = false,
+                EnableBetweenLoopActions = false,
+                EnableTerminationActions = false,
+                LootTreasure = false
+            }
+        });
 
         this.SetProfileToDefault();
     }
@@ -628,10 +628,10 @@ public class ConfigurationMain : IEzConfig
         });
     }
 
-    public void CreateNewProfile() => 
+    public void CreateNewProfile() =>
         this.CreateProfile("Profile" + (this.profileByName.Count - 1).ToString(CultureInfo.InvariantCulture));
 
-    public void CreateProfile(string name) => 
+    public void CreateProfile(string name) =>
         this.CreateProfile(name, new Configuration());
 
     public void CreateProfile(string name, Configuration config)
@@ -639,10 +639,10 @@ public class ConfigurationMain : IEzConfig
         DebugLog($"Creating new Profile: {name}");
 
         ProfileData profile = new()
-                           {
-                               Name   = name,
-                               Config = config
-                           };
+        {
+            Name = name,
+            Config = config
+        };
 
         this.profileData.Add(profile);
         this.profileByName.Add(name, profile);
@@ -652,7 +652,7 @@ public class ConfigurationMain : IEzConfig
     public void DuplicateCurrentProfile()
     {
         string name;
-        int    counter = 0;
+        int counter = 0;
 
         string templateName = this.ActiveProfileName.EndsWith("_Copy") ? this.ActiveProfileName : $"{this.ActiveProfileName}_Copy";
 
@@ -660,11 +660,11 @@ public class ConfigurationMain : IEzConfig
             name = counter++ > 0 ? $"{templateName}{counter}" : templateName;
         while (this.profileByName.ContainsKey(name));
 
-        string?        oldConfig = EzConfig.DefaultSerializationFactory.Serialize(this.GetCurrentConfig);
-        if(oldConfig != null)
+        string? oldConfig = EzConfig.DefaultSerializationFactory.Serialize(this.GetCurrentConfig);
+        if (oldConfig != null)
         {
             Configuration? newConfig = EzConfig.DefaultSerializationFactory.Deserialize<Configuration>(oldConfig);
-            if(newConfig != null)
+            if (newConfig != null)
                 this.CreateProfile(name, newConfig);
         }
     }
@@ -685,15 +685,15 @@ public class ConfigurationMain : IEzConfig
         ProfileData config = this.GetCurrentProfile;
         this.profileByName.Remove(this.ActiveProfileName);
         this.profileByName[newName] = config;
-        config.Name                 = newName;
-        this.activeProfileName      = newName;
+        config.Name = newName;
+        this.activeProfileName = newName;
 
         EzConfig.Save();
 
         return true;
     }
 
-    public ProfileData? GetProfile(string name) => 
+    public ProfileData? GetProfile(string name) =>
         this.profileByName.GetValueOrDefault(name);
 
     public void SetCharacterDefault()
@@ -712,10 +712,10 @@ public class ConfigurationMain : IEzConfig
                               this.GetCurrentProfile.CIDs.Add(cid);
                               this.profileByCID.Add(cid, this.ActiveProfileName);
                               this.charByCID[cid] = new CharData
-                                                    {
-                                                        CID  = cid,
-                                                        Name = Player.Name,
-                                                        World = Player.CurrentWorld
+                              {
+                                  CID = cid,
+                                  Name = Player.Name,
+                                  World = Player.CurrentWorld
                               };
 
                               EzConfig.Save();
@@ -747,19 +747,19 @@ public class ConfigurationMain : IEzConfig
 [JsonObject(MemberSerialization.OptOut)]
 public class ProfileData
 {
-    public required string         Name;
-    public          HashSet<ulong> CIDs = [];
-    public required Configuration  Config;
+    public required string Name;
+    public HashSet<ulong> CIDs = [];
+    public required Configuration Config;
 }
 
 public class AutoDutySerializationFactory : DefaultSerializationFactory, ISerializationFactory
 {
     public override string DefaultConfigFileName { get; } = "AutoDutyConfig.json";
 
-    public new string Serialize(object config) => 
+    public new string Serialize(object config) =>
         base.Serialize(config, true);
 
-    public override byte[] SerializeAsBin(object config) => 
+    public override byte[] SerializeAsBin(object config) =>
         Encoding.UTF8.GetBytes(this.Serialize(config));
 }
 
@@ -769,7 +769,7 @@ public class AutoDutySerializationFactory : DefaultSerializationFactory, ISerial
 public class Configuration
 {
     //Meta
-    public HashSet<string>                                    DoNotUpdatePathFiles = [];
+    public HashSet<string> DoNotUpdatePathFiles = [];
     public Dictionary<uint, Dictionary<string, JobWithRole>?> PathSelectionsByPath = [];
 
     //LogOptions
@@ -790,9 +790,9 @@ public class Configuration
             Plugin.LevelingModeEnum = LevelingMode.None;
         }
     }
-    
-    public bool Unsynced                       = false;
-    public bool HideUnavailableDuties          = false;
+
+    public bool Unsynced = false;
+    public bool HideUnavailableDuties = false;
     public bool PreferTrustOverSupportLeveling = false;
 
     public bool ShowMainWindowOnStartup = false;
@@ -813,7 +813,7 @@ public class Configuration
     public bool HideOverlayWhenStopped
     {
         get => hideOverlayWhenStopped;
-        set 
+        set
         {
             hideOverlayWhenStopped = value;
             if (Plugin.Overlay != null)
@@ -826,7 +826,7 @@ public class Configuration
     public bool LockOverlay
     {
         get => lockOverlay;
-        set 
+        set
         {
             lockOverlay = value;
             if (value)
@@ -848,25 +848,25 @@ public class Configuration
                 SchedulerHelper.ScheduleAction("OverlayNoBGSetter", () => { if (Plugin.Overlay.Flags.HasFlag(ImGuiWindowFlags.NoBackground)) Plugin.Overlay.Flags -= ImGuiWindowFlags.NoBackground; }, () => Plugin.Overlay != null);
         }
     }
-    public bool ShowDutyLoopText       = true;
-    public bool ShowActionText         = true;
-    public bool UseSliderInputs        = false;
+    public bool ShowDutyLoopText = true;
+    public bool ShowActionText = true;
+    public bool UseSliderInputs = false;
     public bool OverrideOverlayButtons = true;
-    public bool GotoButton             = true;
-    public bool TurninButton           = true;
-    public bool DesynthButton          = true;
-    public bool ExtractButton          = true;
-    public bool RepairButton           = true;
-    public bool EquipButton            = true;
-    public bool CofferButton           = true;
-    public bool TTButton               = true;
+    public bool GotoButton = true;
+    public bool TurninButton = true;
+    public bool DesynthButton = true;
+    public bool ExtractButton = true;
+    public bool RepairButton = true;
+    public bool EquipButton = true;
+    public bool CofferButton = true;
+    public bool TTButton = true;
 
 
     //Duty Config Options
-    public   bool AutoExitDuty                  = true;
-    public   bool OnlyExitWhenDutyDone          = false;
-    public   bool AutoManageRotationPluginState = true;
-    internal bool autoManageBossModAISettings   = true;
+    public bool AutoExitDuty = true;
+    public bool OnlyExitWhenDutyDone = false;
+    public bool AutoManageRotationPluginState = true;
+    internal bool autoManageBossModAISettings = true;
     public bool AutoManageBossModAISettings
     {
         get => autoManageBossModAISettings;
@@ -876,25 +876,25 @@ public class Configuration
             HideBossModAIConfig = !value;
         }
     }
-    public bool       AutoManageVnavAlignCamera      = true;
-    public bool       LootTreasure                   = true;
-    public LootMethod LootMethodEnum                 = LootMethod.AutoDuty;
-    public bool       LootBossTreasureOnly           = false;
-    public int        TreasureCofferScanDistance     = 25;
-    public bool       RebuildNavmeshOnStuck          = true;
-    public byte       RebuildNavmeshAfterStuckXTimes = 5;
-    public int        MinStuckTime                   = 500;
+    public bool AutoManageVnavAlignCamera = true;
+    public bool LootTreasure = true;
+    public LootMethod LootMethodEnum = LootMethod.AutoDuty;
+    public bool LootBossTreasureOnly = false;
+    public int TreasureCofferScanDistance = 25;
+    public bool RebuildNavmeshOnStuck = true;
+    public byte RebuildNavmeshAfterStuckXTimes = 5;
+    public int MinStuckTime = 500;
 
-    public bool PathDrawEnabled   = false;
-    public int  PathDrawStepCount = 5;
+    public bool PathDrawEnabled = false;
+    public int PathDrawStepCount = 5;
 
-    public bool       OverridePartyValidation        = false;
-    public bool       UsingAlternativeRotationPlugin = false;
-    public bool       UsingAlternativeMovementPlugin = false;
-    public bool       UsingAlternativeBossPlugin     = false;
+    public bool OverridePartyValidation = false;
+    public bool UsingAlternativeRotationPlugin = false;
+    public bool UsingAlternativeMovementPlugin = false;
+    public bool UsingAlternativeBossPlugin = false;
 
-    public bool        TreatUnsyncAsW2W = true;
-    public JobWithRole W2WJobs          = JobWithRole.Tanks;
+    public bool TreatUnsyncAsW2W = true;
+    public JobWithRole W2WJobs = JobWithRole.Tanks;
 
     public bool IsW2W(Job? job = null, bool? unsync = null)
     {
@@ -910,36 +910,36 @@ public class Configuration
 
 
     //PreLoop Config Options
-    public bool                                       EnablePreLoopActions     = true;
-    public bool                                       ExecuteCommandsPreLoop   = false;
-    public List<string>                               CustomCommandsPreLoop    = [];
-    public bool                                       RetireMode               = false;
-    public RetireLocation                             RetireLocationEnum       = RetireLocation.Inn;
-    public List<System.Numerics.Vector3>              PersonalHomeEntrancePath = [];
-    public List<System.Numerics.Vector3>              FCEstateEntrancePath     = [];
-    public bool                                       AutoEquipRecommendedGear;
-    public bool                                       AutoEquipRecommendedGearGearsetter;
-    public bool                                       AutoEquipRecommendedGearGearsetterOldToInventory;
-    public bool                                       AutoRepair              = false;
-    public uint                                       AutoRepairPct           = 50;
-    public bool                                       AutoRepairSelf          = false;
-    public RepairNpcData?                             PreferredRepairNPC      = null;
-    public bool                                       AutoConsume             = false;
-    public bool                                       AutoConsumeIgnoreStatus = false;
-    public int                                        AutoConsumeTime         = 29;
-    public List<KeyValuePair<ushort, ConsumableItem>> AutoConsumeItemsList    = [];
+    public bool EnablePreLoopActions = true;
+    public bool ExecuteCommandsPreLoop = false;
+    public List<string> CustomCommandsPreLoop = [];
+    public bool RetireMode = false;
+    public RetireLocation RetireLocationEnum = RetireLocation.Inn;
+    public List<System.Numerics.Vector3> PersonalHomeEntrancePath = [];
+    public List<System.Numerics.Vector3> FCEstateEntrancePath = [];
+    public bool AutoEquipRecommendedGear;
+    public bool AutoEquipRecommendedGearGearsetter;
+    public bool AutoEquipRecommendedGearGearsetterOldToInventory;
+    public bool AutoRepair = false;
+    public uint AutoRepairPct = 50;
+    public bool AutoRepairSelf = false;
+    public RepairNpcData? PreferredRepairNPC = null;
+    public bool AutoConsume = false;
+    public bool AutoConsumeIgnoreStatus = false;
+    public int AutoConsumeTime = 29;
+    public List<KeyValuePair<ushort, ConsumableItem>> AutoConsumeItemsList = [];
 
     //Between Loop Config Options
-    public bool         EnableBetweenLoopActions         = true;
-    public bool         ExecuteBetweenLoopActionLastLoop = false;
-    public int          WaitTimeBeforeAfterLoopActions   = 0;
-    public bool         ExecuteCommandsBetweenLoop       = false;
-    public List<string> CustomCommandsBetweenLoop        = [];
-    public bool         AutoExtract                      = false;
+    public bool EnableBetweenLoopActions = true;
+    public bool ExecuteBetweenLoopActionLastLoop = false;
+    public int WaitTimeBeforeAfterLoopActions = 0;
+    public bool ExecuteCommandsBetweenLoop = false;
+    public List<string> CustomCommandsBetweenLoop = [];
+    public bool AutoExtract = false;
 
-    public bool                     AutoOpenCoffers = false;
-    public byte?                    AutoOpenCoffersGearset;
-    public bool                     AutoOpenCoffersBlacklistUse;
+    public bool AutoOpenCoffers = false;
+    public byte? AutoOpenCoffersGearset;
+    public bool AutoOpenCoffersBlacklistUse;
     public Dictionary<uint, string> AutoOpenCoffersBlacklist = [];
 
     internal bool autoExtractAll = false;
@@ -1012,9 +1012,9 @@ public class Configuration
     public string SoundPath = "";
     public TerminationMode TerminationMethodEnum = TerminationMode.Do_Nothing;
     public bool TerminationKeepActive = true;
-    
+
     //BMAI Config Options
-    public bool HideBossModAIConfig           = false;
+    public bool HideBossModAIConfig = false;
     public bool BM_UpdatePresetsAutomatically = true;
 
 
@@ -1031,7 +1031,7 @@ public class Configuration
     }
     public float MaxDistanceToTargetFloat = 2.6f;
     public float MaxDistanceToTargetAoEFloat = 12;
-    
+
     internal bool positionalRoleBased = true;
     public bool PositionalRoleBased
     {
@@ -1043,18 +1043,18 @@ public class Configuration
                 SchedulerHelper.ScheduleAction("PositionalRoleBasedBMRoleChecks", () => Plugin.BMRoleChecks(), () => PlayerHelper.IsReady);
         }
     }
-    public float MaxDistanceToTargetRoleMelee  = 2.6f;
+    public float MaxDistanceToTargetRoleMelee = 2.6f;
     public float MaxDistanceToTargetRoleRanged = 10f;
 
 
-    internal bool       positionalAvarice = true;
-    public   Positional PositionalEnum    = Positional.Any;
+    internal bool positionalAvarice = true;
+    public Positional PositionalEnum = Positional.Any;
 
     #region Wrath
 
-    public   bool                                                       Wrath_AutoSetupJobs { get; set; } = true;
-    public Wrath_IPCSubscriber.DPSRotationMode    Wrath_TargetingTank    = Wrath_IPCSubscriber.DPSRotationMode.Highest_Max;
-    public Wrath_IPCSubscriber.DPSRotationMode    Wrath_TargetingNonTank = Wrath_IPCSubscriber.DPSRotationMode.Lowest_Current;
+    public bool Wrath_AutoSetupJobs { get; set; } = true;
+    public Wrath_IPCSubscriber.DPSRotationMode Wrath_TargetingTank = Wrath_IPCSubscriber.DPSRotationMode.Highest_Max;
+    public Wrath_IPCSubscriber.DPSRotationMode Wrath_TargetingNonTank = Wrath_IPCSubscriber.DPSRotationMode.Lowest_Current;
 
 
     #endregion
@@ -1080,7 +1080,7 @@ public static class ConfigTab
     private static string stopItemQtyItemNameInput = "";
     private static KeyValuePair<uint, string> stopItemQtySelectedItem = new(0, "");
 
-    private static string                     autoOpenCoffersNameInput    = "";
+    private static string autoOpenCoffersNameInput = "";
     private static KeyValuePair<uint, string> autoOpenCoffersSelectedItem = new(0, "");
 
     public class ConsumableItem
@@ -1100,16 +1100,16 @@ public static class ConfigTab
 
     private static readonly Sounds[] _validSounds = ((Sounds[])Enum.GetValues(typeof(Sounds))).Where(s => s != Sounds.None && s != Sounds.Unknown).ToArray();
 
-    private static bool overlayHeaderSelected      = false;
-    private static bool devHeaderSelected          = false;
-    private static bool dutyConfigHeaderSelected   = false;
-    private static bool bmaiSettingHeaderSelected  = false;
+    private static bool overlayHeaderSelected = false;
+    private static bool devHeaderSelected = false;
+    private static bool dutyConfigHeaderSelected = false;
+    private static bool bmaiSettingHeaderSelected = false;
     private static bool wrathSettingHeaderSelected = false;
-    private static bool w2wSettingHeaderSelected   = false;
-    private static bool advModeHeaderSelected      = false;
-    private static bool preLoopHeaderSelected      = false;
-    private static bool betweenLoopHeaderSelected  = false;
-    private static bool terminationHeaderSelected  = false;
+    private static bool w2wSettingHeaderSelected = false;
+    private static bool advModeHeaderSelected = false;
+    private static bool preLoopHeaderSelected = false;
+    private static bool betweenLoopHeaderSelected = false;
+    private static bool terminationHeaderSelected = false;
 
     public static void BuildManuals()
     {
@@ -1149,7 +1149,7 @@ public static class ConfigTab
                         ImGuiHelper.DrawIcon(FontAwesomeIcon.CheckCircle);
 
                     float textX = ImGui.GetCursorPosX();
-                        
+
                     ImGui.SetCursorPosX(selectableX);
                     ImGui.SetItemAllowOverlap();
                     if (ImGui.Selectable($"###{key}ConfigSelectable"))
@@ -1158,7 +1158,7 @@ public static class ConfigTab
                     ImGui.Text(key);
 
                     ProfileData? profile = ConfigurationMain.Instance.GetProfile(key);
-                    if(profile?.CIDs.Any() ?? false)
+                    if (profile?.CIDs.Any() ?? false)
                     {
                         ImGui.SameLine();
                         ImGuiEx.TextWrapped(ImGuiHelper.VersionColor, string.Join(", ", profile.CIDs.Select(cid => ConfigurationMain.Instance.charByCID.TryGetValue(cid, out ConfigurationMain.CharData cd) ? cd.GetName() : cid.ToString())));
@@ -1171,7 +1171,7 @@ public static class ConfigTab
 
         if (ImGui.IsPopupOpen("##RenameProfile"))
         {
-            bool    open     = true;
+            bool open = true;
             Vector2 textSize = ImGui.CalcTextSize(profileRenameInput);
             ImGui.SetNextWindowSize(new Vector2(textSize.X + 200, textSize.Y + 120) * ImGuiHelpers.GlobalScale);
             if (ImGui.BeginPopupModal($"##RenameProfile", ref open, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove))
@@ -1227,7 +1227,7 @@ public static class ConfigTab
         ImGui.SameLine();
         using (ImRaii.Disabled(ImGui.GetIO().KeyCtrl ? ConfigurationMain.Instance.GetCurrentProfile.CIDs.Contains(Player.CID) != ImGui.GetIO().KeyShift : ConfigurationMain.Instance.DefaultConfigName == ConfigurationMain.Instance.ActiveProfileName))
             if (ImGuiComponents.IconButton(FontAwesomeIcon.CheckCircle))
-                if(ImGui.GetIO().KeyCtrl)
+                if (ImGui.GetIO().KeyCtrl)
                     if (ImGui.GetIO().KeyShift)
                         ConfigurationMain.Instance.RemoveCharacterDefault();
                     else
@@ -1254,7 +1254,7 @@ public static class ConfigTab
         ImGui.Separator();
         ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
         var overlayHeader = ImGui.Selectable("Window & Overlay Settings", overlayHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
-        ImGui.PopStyleVar();      
+        ImGui.PopStyleVar();
         if (ImGui.IsItemHovered())
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         if (overlayHeader)
@@ -1287,7 +1287,7 @@ public static class ConfigTab
                 }
                 ImGui.NextColumn();
                 //ImGui.SameLine(0, 57);
-                
+
                 if (ImGui.Checkbox("Show Duty/Loops Text", ref Configuration.ShowDutyLoopText))
                     Configuration.Save();
                 ImGui.NextColumn();
@@ -1340,7 +1340,7 @@ public static class ConfigTab
             ImGui.SameLine();
             if (ImGui.Checkbox("Slider Inputs", ref Configuration.UseSliderInputs))
                 Configuration.Save();
-            
+
         }
 
         if (Plugin.isDev)
@@ -1370,7 +1370,7 @@ public static class ConfigTab
                 if (ImGui.Checkbox(nameof(ConfigurationMain.host), ref ConfigurationMain.Instance.host))
                     Configuration.Save();
 
-                if(ConfigurationMain.Instance.MultiBox && ConfigurationMain.Instance.host)
+                if (ConfigurationMain.Instance.MultiBox && ConfigurationMain.Instance.host)
                 {
                     ImGui.Indent();
                     for (int i = 0; i < ConfigurationMain.MultiboxUtility.Server.MAX_SERVERS; i++)
@@ -1381,12 +1381,12 @@ public static class ConfigTab
                 }
 
 
-                if (ImGui.Button("Print mod list")) 
-                    Svc.Log.Info(string.Join("\n", PluginInterface.InstalledPlugins.Where(pl => pl.IsLoaded).GroupBy(pl => pl.Manifest.InstalledFromUrl).OrderByDescending(g => g.Count()).Select(g => g.Key+"\n\t"+string.Join("\n\t", g.Select(pl => pl.Name)))));
+                if (ImGui.Button("Print mod list"))
+                    Svc.Log.Info(string.Join("\n", PluginInterface.InstalledPlugins.Where(pl => pl.IsLoaded).GroupBy(pl => pl.Manifest.InstalledFromUrl).OrderByDescending(g => g.Count()).Select(g => g.Key + "\n\t" + string.Join("\n\t", g.Select(pl => pl.Name)))));
 
                 if (ImGui.CollapsingHeader("Available Duty Support"))//ImGui.Button("check duty support?"))
                 {
-                    if(GenericHelpers.TryGetAddonMaster<AddonMaster.DawnStory>(out AddonMaster.DawnStory? m))
+                    if (GenericHelpers.TryGetAddonMaster<AddonMaster.DawnStory>(out AddonMaster.DawnStory? m))
                     {
                         if (m.IsAddonReady)
                         {
@@ -1440,14 +1440,14 @@ public static class ConfigTab
                 if (ImGui.Button("Turn off rotation"))
                 {
                     Plugin.SetRotationPluginSettings(false);
-                    if(Wrath_IPCSubscriber.IsEnabled)
+                    if (Wrath_IPCSubscriber.IsEnabled)
                         Wrath_IPCSubscriber.Release();
                 }
 
                 if (ImGui.Button("BetweenLoopActions##DevBetweenLoops"))
                 {
-                    Plugin.CurrentTerritoryContent =  ContentHelper.DictionaryContent.Values.First();
-                    Plugin.States                  |= PluginState.Other;
+                    Plugin.CurrentTerritoryContent = ContentHelper.DictionaryContent.Values.First();
+                    Plugin.States |= PluginState.Other;
                     Plugin.LoopTasks(false);
                 }
 
@@ -1544,7 +1544,7 @@ public static class ConfigTab
                         {
                             foreach (Wrath_IPCSubscriber.DPSRotationMode targeting in Enum.GetValues(typeof(Wrath_IPCSubscriber.DPSRotationMode)))
                             {
-                                if(targeting == Wrath_IPCSubscriber.DPSRotationMode.Tank_Target)
+                                if (targeting == Wrath_IPCSubscriber.DPSRotationMode.Tank_Target)
                                     continue;
 
                                 if (ImGui.Selectable(targeting.ToCustomString()))
@@ -1593,7 +1593,7 @@ public static class ConfigTab
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 if (bmaiSettingHeader)
                     bmaiSettingHeaderSelected = !bmaiSettingHeaderSelected;
-            
+
                 if (bmaiSettingHeaderSelected == true)
                 {
                     if (ImGui.Button("Update Presets"))
@@ -1601,7 +1601,7 @@ public static class ConfigTab
                         BossMod_IPCSubscriber.RefreshPreset("AutoDuty", Resources.AutoDutyPreset);
                         BossMod_IPCSubscriber.RefreshPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
                     }
-                    if (ImGui.Checkbox("Update Presets automatically", ref Configuration.BM_UpdatePresetsAutomatically)) 
+                    if (ImGui.Checkbox("Update Presets automatically", ref Configuration.BM_UpdatePresetsAutomatically))
                         Configuration.Save();
                     if (ImGui.Checkbox("Set Max Distance To Target Based on Player Role", ref Configuration.maxDistanceToTargetRoleBased))
                     {
@@ -1649,7 +1649,7 @@ public static class ConfigTab
                         ImGui.SameLine(0, 10);
                         if (ImGui.Button(Configuration.PositionalEnum.ToCustomString()))
                             ImGui.OpenPopup("PositionalPopup");
-            
+
                         if (ImGui.BeginPopup("PositionalPopup"))
                         {
                             foreach (Positional positional in Enum.GetValues(typeof(Positional)))
@@ -1692,7 +1692,7 @@ public static class ConfigTab
                 {
                     foreach (LootMethod lootMethod in Enum.GetValues(typeof(LootMethod)))
                     {
-                        if(lootMethod == LootMethod.RotationSolver)
+                        if (lootMethod == LootMethod.RotationSolver)
                             continue;
                         using (ImRaii.Disabled((lootMethod == LootMethod.Pandora && !PandorasBox_IPCSubscriber.IsEnabled)))
                         {
@@ -1705,9 +1705,9 @@ public static class ConfigTab
                     }
                     ImGui.EndCombo();
                 }
-                
+
                 if (ImGui.Checkbox("Loot Boss Treasure Only", ref Configuration.LootBossTreasureOnly))
-                        Configuration.Save();
+                    Configuration.Save();
 
                 ImGuiComponents.HelpMarker("AutoDuty will walk around non-boss chests, and only loot boss chests.\nNot all paths may accomodate.");
                 ImGui.PopItemWidth();
@@ -1727,14 +1727,14 @@ public static class ConfigTab
             {
                 ImGui.SameLine();
                 int rebuildX = Configuration.RebuildNavmeshAfterStuckXTimes;
-                if(ImGui.InputInt("times##RebuildNavmeshAfterStuckXTimes", ref rebuildX))
+                if (ImGui.InputInt("times##RebuildNavmeshAfterStuckXTimes", ref rebuildX))
                 {
-                    Configuration.RebuildNavmeshAfterStuckXTimes = (byte) Math.Clamp(rebuildX, byte.MinValue+1, byte.MaxValue);
+                    Configuration.RebuildNavmeshAfterStuckXTimes = (byte)Math.Clamp(rebuildX, byte.MinValue + 1, byte.MaxValue);
                     Configuration.Save();
                 }
             }
 
-            if(ImGui.Checkbox("Draw next steps in Path", ref Configuration.PathDrawEnabled))
+            if (ImGui.Checkbox("Draw next steps in Path", ref Configuration.PathDrawEnabled))
                 Configuration.Save();
             ImGui.PopItemWidth();
             if (Configuration.PathDrawEnabled)
@@ -1762,7 +1762,7 @@ public static class ConfigTab
 
             if (w2wSettingHeaderSelected)
             {
-                if(ImGui.Checkbox("Treat Unsync as W2W", ref Configuration.TreatUnsyncAsW2W))
+                if (ImGui.Checkbox("Treat Unsync as W2W", ref Configuration.TreatUnsyncAsW2W))
                     Configuration.Save();
                 ImGuiComponents.HelpMarker("Only works in paths with W2W tags on steps");
 
@@ -1864,7 +1864,7 @@ public static class ConfigTab
                                                                                                        (ImGui.GetTextLineHeightWithSpacing() * Configuration.PersonalHomeEntrancePath.Count) + 5)))
                         {
                             var removeItem = false;
-                            var removeAt   = 0;
+                            var removeAt = 0;
 
                             foreach (var item in Configuration.PersonalHomeEntrancePath.Select((Value, Index) => (Value, Index)))
                             {
@@ -1872,7 +1872,7 @@ public static class ConfigTab
                                 if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                                 {
                                     removeItem = true;
-                                    removeAt   = item.Index;
+                                    removeAt = item.Index;
                                 }
                             }
 
@@ -1899,7 +1899,7 @@ public static class ConfigTab
                                                                                                    (ImGui.GetTextLineHeightWithSpacing() * Configuration.FCEstateEntrancePath.Count) + 5)))
                         {
                             var removeItem = false;
-                            var removeAt   = 0;
+                            var removeAt = 0;
 
                             foreach (var item in Configuration.FCEstateEntrancePath.Select((Value, Index) => (Value, Index)))
                             {
@@ -1907,7 +1907,7 @@ public static class ConfigTab
                                 if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                                 {
                                     removeItem = true;
-                                    removeAt   = item.Index;
+                                    removeAt = item.Index;
                                 }
                             }
 
@@ -2108,15 +2108,15 @@ public static class ConfigTab
                     using (ImRaii.ListBox("##ConsumableItemList", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X,
                                                                                               (ImGui.GetTextLineHeightWithSpacing() * Configuration.AutoConsumeItemsList.Count) + 5)))
                     {
-                        var                                  boolRemoveItem = false;
-                        KeyValuePair<ushort, ConsumableItem> removeItem     = new();
+                        var boolRemoveItem = false;
+                        KeyValuePair<ushort, ConsumableItem> removeItem = new();
                         foreach (var item in Configuration.AutoConsumeItemsList)
                         {
                             ImGui.Selectable($"{item.Value.Name}");
                             if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                             {
                                 boolRemoveItem = true;
-                                removeItem     = item;
+                                removeItem = item;
                             }
                         }
 
@@ -2169,7 +2169,7 @@ public static class ConfigTab
                 ImGui.Separator();
 
                 MakeCommands("Execute commands in between of all loops",
-                             ref Configuration.ExecuteCommandsBetweenLoop,    ref Configuration.CustomCommandsBetweenLoop, ref betweenLoopCommand);
+                             ref Configuration.ExecuteCommandsBetweenLoop, ref Configuration.CustomCommandsBetweenLoop, ref betweenLoopCommand);
 
                 if (ImGui.Checkbox("Auto Extract", ref Configuration.AutoExtract))
                     Configuration.Save();
@@ -2204,8 +2204,8 @@ public static class ConfigTab
                         ImGui.SameLine();
 
                         RaptureGearsetModule* module = RaptureGearsetModule.Instance();
-                        
-                        if (Configuration.AutoOpenCoffersGearset != null && !module->IsValidGearset((int) Configuration.AutoOpenCoffersGearset))
+
+                        if (Configuration.AutoOpenCoffersGearset != null && !module->IsValidGearset((int)Configuration.AutoOpenCoffersGearset))
                         {
                             Configuration.AutoOpenCoffersGearset = null;
                             Configuration.Save();
@@ -2223,7 +2223,7 @@ public static class ConfigTab
                             for (int i = 0; i < module->NumGearsets; i++)
                             {
                                 RaptureGearsetModule.GearsetEntry* gearset = module->GetGearset(i);
-                                if(ImGui.Selectable(gearset->NameString))
+                                if (ImGui.Selectable(gearset->NameString))
                                 {
                                     Configuration.AutoOpenCoffersGearset = gearset->Id;
                                     Configuration.Save();
@@ -2264,7 +2264,7 @@ public static class ConfigTab
                                     Configuration.Save();
                                 }
                             }
-                            
+
                             if (!ImGui.BeginListBox("##CofferBlackList", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * Configuration.AutoOpenCoffersBlacklist.Count) + 5))) return;
 
                             foreach (var item in Configuration.AutoOpenCoffersBlacklist)
@@ -2278,7 +2278,7 @@ public static class ConfigTab
                             }
                             ImGui.EndListBox();
                         }
-                        
+
                         ImGui.Unindent();
                     }
                 }
@@ -2322,7 +2322,7 @@ public static class ConfigTab
                         Configuration.AutoGCTurnin = Configuration.autoGCTurnin;
                         Configuration.Save();
                     }
-                    
+
                     ImGui.NextColumn();
 
                     //slightly cursed
@@ -2386,7 +2386,7 @@ public static class ConfigTab
                             }
                             ImGui.PopItemWidth();
                         }
-                        if (ImGui.Checkbox("Use GC Aetheryte Ticket", ref Configuration.AutoGCTurninUseTicket)) 
+                        if (ImGui.Checkbox("Use GC Aetheryte Ticket", ref Configuration.AutoGCTurninUseTicket))
                             Configuration.Save();
                         ImGui.Unindent();
                     }
@@ -2406,7 +2406,7 @@ public static class ConfigTab
                     ImGuiEx.TextCopy(ImGuiHelper.LinkColor, @"https://love.puni.sh/ment.json");
                 }
 
-                if(ImGui.Checkbox("Triple Triad", ref Configuration.TripleTriadEnabled))
+                if (ImGui.Checkbox("Triple Triad", ref Configuration.TripleTriadEnabled))
                     Configuration.Save();
                 ImGui.SameLine();
                 ImGui.TextColored(Configuration.TripleTriadEnabled ? GradientColor.Get(ImGuiHelper.ExperimentalColor, ImGuiHelper.ExperimentalColor2, 500) : ImGuiHelper.ExperimentalColor, "EXPERIMENTAL");
@@ -2559,10 +2559,10 @@ public static class ConfigTab
                 }
 
                 MakeCommands("Execute commands on termination of all loops",
-                             ref Configuration.ExecuteCommandsTermination,  ref Configuration.CustomCommandsTermination, ref terminationCommand);
+                             ref Configuration.ExecuteCommandsTermination, ref Configuration.CustomCommandsTermination, ref terminationCommand);
 
                 if (ImGui.Checkbox("Play Sound on Completion of All Loops: ", ref Configuration.PlayEndSound)) //Heavily Inspired by ChatAlerts
-                        Configuration.Save();
+                    Configuration.Save();
                 if (Configuration.PlayEndSound)
                 {
                     if (ImGuiEx.IconButton(FontAwesomeIcon.Play, "##ConfigSoundTest", new Vector2(ImGui.GetItemRectSize().Y)))
@@ -2619,7 +2619,7 @@ public static class ConfigTab
                     }
                 }
                 ImGui.PopItemWidth();
-                    
+
                 ImGui.SameLine(0, 5);
                 using (ImRaii.Disabled(curCommand.IsNullOrEmpty() || curCommand[0] != '/'))
                 {
@@ -2629,11 +2629,11 @@ public static class ConfigTab
                         Configuration.Save();
                     }
                 }
-                if (!ImGui.BeginListBox($"##CommandList{checkbox}", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * commands.Count) + 5))) 
+                if (!ImGui.BeginListBox($"##CommandList{checkbox}", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * commands.Count) + 5)))
                     return;
 
                 var removeItem = false;
-                var removeAt   = 0;
+                var removeAt = 0;
 
                 foreach (var item in commands.Select((Value, Index) => (Value, Index)))
                 {
@@ -2641,7 +2641,7 @@ public static class ConfigTab
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
                         removeItem = true;
-                        removeAt   = item.Index;
+                        removeAt = item.Index;
                     }
                 }
                 if (removeItem)

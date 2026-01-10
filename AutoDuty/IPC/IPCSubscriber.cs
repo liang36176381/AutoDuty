@@ -101,7 +101,7 @@ namespace AutoDuty.IPC
         [EzIPC("Presets.GetActive", true)] internal static readonly Func<string> Presets_GetActive;
         [EzIPC("Presets.SetActive", true)] internal static readonly Func<string, bool> Presets_SetActive;
         [EzIPC("Presets.ClearActive", true)] internal static readonly Func<bool> Presets_ClearActive;
-        [EzIPC("Presets.GetForceDisabled", true)] internal static readonly Func<bool> Presets_GetForceDisabled; 
+        [EzIPC("Presets.GetForceDisabled", true)] internal static readonly Func<bool> Presets_GetForceDisabled;
         [EzIPC("Presets.SetForceDisabled", true)] internal static readonly Func<bool> Presets_SetForceDisabled;
         /** string presetName, string moduleTypeName, string trackName, string value*/
         [EzIPC("Presets.AddTransientStrategy")] internal static readonly Func<string, string, string, string, bool> Presets_AddTransientStrategy;
@@ -150,7 +150,7 @@ namespace AutoDuty.IPC
             {
                 Svc.Log.Debug($"BossMod Setting Range to: {range}");
 
-                Presets_AddTransientStrategy("AutoDuty",         "BossMod.Autorotation.MiscAI.StayCloseToTarget", "range", MathF.Round(range, 1).ToString(CultureInfo.InvariantCulture));
+                Presets_AddTransientStrategy("AutoDuty", "BossMod.Autorotation.MiscAI.StayCloseToTarget", "range", MathF.Round(range, 1).ToString(CultureInfo.InvariantCulture));
                 Presets_AddTransientStrategy("AutoDuty Passive", "BossMod.Autorotation.MiscAI.StayCloseToTarget", "range", MathF.Round(range, 1).ToString(CultureInfo.InvariantCulture));
             }
         }
@@ -165,7 +165,7 @@ namespace AutoDuty.IPC
 
                 string destinationStrategy = (on ? DestinationStrategy.Pathfind : DestinationStrategy.None).ToString();
 
-                Presets_AddTransientStrategy("AutoDuty",         "BossMod.Autorotation.MiscAI.NormalMovement", "Destination", destinationStrategy);
+                Presets_AddTransientStrategy("AutoDuty", "BossMod.Autorotation.MiscAI.NormalMovement", "Destination", destinationStrategy);
                 Presets_AddTransientStrategy("AutoDuty Passive", "BossMod.Autorotation.MiscAI.NormalMovement", "Destination", destinationStrategy);
             }
         }
@@ -181,7 +181,7 @@ namespace AutoDuty.IPC
         }
     }
 
-    
+
     internal static class YesAlready_IPCSubscriber
     {
         private static EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(typeof(YesAlready_IPCSubscriber), "YesAlready", SafeWrapper.IPCException);
@@ -193,7 +193,7 @@ namespace AutoDuty.IPC
 
         internal static void Dispose() => IPCSubscriber_Common.DisposeAll(_disposalTokens);
 
-        public static void SetState(bool on) => 
+        public static void SetState(bool on) =>
             SetPluginEnabled(on);
     }
 
@@ -214,17 +214,17 @@ namespace AutoDuty.IPC
 
         internal static bool IsEnabled => IPCSubscriber_Common.IsReady("vnavmesh");
 
-        [EzIPC("Nav.IsReady",            true)] internal static readonly Func<bool>                                                           Nav_IsReady;
-        [EzIPC("Nav.BuildProgress",      true)] internal static readonly Func<float>                                                          Nav_BuildProgress;
-        [EzIPC("Nav.Reload",             true)] internal static readonly Func<bool>                                                           Nav_Reload;
-        [EzIPC("Nav.Rebuild",            true)] internal static readonly Func<bool>                                                           Nav_Rebuild;
-        [EzIPC("Nav.Pathfind",           true)] internal static readonly Func<Vector3, Vector3, bool, Task<List<Vector3>>>                    Nav_Pathfind;
+        [EzIPC("Nav.IsReady", true)] internal static readonly Func<bool> Nav_IsReady;
+        [EzIPC("Nav.BuildProgress", true)] internal static readonly Func<float> Nav_BuildProgress;
+        [EzIPC("Nav.Reload", true)] internal static readonly Func<bool> Nav_Reload;
+        [EzIPC("Nav.Rebuild", true)] internal static readonly Func<bool> Nav_Rebuild;
+        [EzIPC("Nav.Pathfind", true)] internal static readonly Func<Vector3, Vector3, bool, Task<List<Vector3>>> Nav_Pathfind;
         [EzIPC("Nav.PathfindCancelable", true)] internal static readonly Func<Vector3, Vector3, bool, CancellationToken, Task<List<Vector3>>> Nav_PathfindCancelable;
-        [EzIPC("Nav.PathfindCancelAll",  true)] internal static readonly Action                                                               Nav_PathfindCancelAll;
-        [EzIPC("Nav.PathfindInProgress", true)] internal static readonly Func<bool>                                                           Nav_PathfindInProgress;
-        [EzIPC("Nav.PathfindNumQueued",  true)] internal static readonly Func<int>                                                            Nav_PathfindNumQueued;
-        [EzIPC("Nav.IsAutoLoad",         true)] internal static readonly Func<bool>                                                           Nav_IsAutoLoad;
-        [EzIPC("Nav.SetAutoLoad",        true)] internal static readonly Action<bool>                                                         Nav_SetAutoLoad;
+        [EzIPC("Nav.PathfindCancelAll", true)] internal static readonly Action Nav_PathfindCancelAll;
+        [EzIPC("Nav.PathfindInProgress", true)] internal static readonly Func<bool> Nav_PathfindInProgress;
+        [EzIPC("Nav.PathfindNumQueued", true)] internal static readonly Func<int> Nav_PathfindNumQueued;
+        [EzIPC("Nav.IsAutoLoad", true)] internal static readonly Func<bool> Nav_IsAutoLoad;
+        [EzIPC("Nav.SetAutoLoad", true)] internal static readonly Action<bool> Nav_SetAutoLoad;
 
         [EzIPC("Query.Mesh.NearestPoint", true)] internal static readonly Func<Vector3, float, float, Vector3> Query_Mesh_NearestPoint;
         [EzIPC("Query.Mesh.PointOnFloor", true)] internal static readonly Func<Vector3, bool, float, Vector3> Query_Mesh_PointOnFloor;
@@ -287,7 +287,7 @@ namespace AutoDuty.IPC
                          "theoretically this was done by you.")]
             LeaseeReleased,
 
-            [Description("IPC Services have been disabled remotely. "                 +
+            [Description("IPC Services have been disabled remotely. " +
                          "Please see the commit history for /res/ipc_status.txt. \n " +
                          "https://github.com/PunishXIV/WrathCombo/commits/main/res/ipc_status.txt")]
             AllServicesSuspended,
@@ -299,32 +299,32 @@ namespace AutoDuty.IPC
         /// </summary>
         public enum AutoRotationConfigOption
         {
-            InCombatOnly         = 0, //bool
-            DPSRotationMode      = 1,
-            HealerRotationMode   = 2,
-            FATEPriority         = 3,  //bool
-            QuestPriority        = 4,  //bool
-            SingleTargetHPP      = 5,  //int
-            AoETargetHPP         = 6,  //int
+            InCombatOnly = 0, //bool
+            DPSRotationMode = 1,
+            HealerRotationMode = 2,
+            FATEPriority = 3,  //bool
+            QuestPriority = 4,  //bool
+            SingleTargetHPP = 5,  //int
+            AoETargetHPP = 6,  //int
             SingleTargetRegenHPP = 7,  //int
-            ManageKardia         = 8,  //bool
-            AutoRez              = 9,  //bool
-            AutoRezDPSJobs       = 10, //bool
-            AutoCleanse          = 11, //bool
-            IncludeNPCs          = 12, //bool
-            OnlyAttackInCombat   = 13, //bool
+            ManageKardia = 8,  //bool
+            AutoRez = 9,  //bool
+            AutoRezDPSJobs = 10, //bool
+            AutoCleanse = 11, //bool
+            IncludeNPCs = 12, //bool
+            OnlyAttackInCombat = 13, //bool
         }
 
         public enum DPSRotationMode
         {
-            Manual          = 0,
-            Highest_Max     = 1,
-            Lowest_Max      = 2,
+            Manual = 0,
+            Highest_Max = 1,
+            Lowest_Max = 2,
             Highest_Current = 3,
-            Lowest_Current  = 4,
-            Tank_Target     = 5,
-            Nearest         = 6,
-            Furthest        = 7,
+            Lowest_Current = 4,
+            Tank_Target = 5,
+            Nearest = 6,
+            Furthest = 7,
         }
 
         /// <summary>
@@ -333,9 +333,9 @@ namespace AutoDuty.IPC
         /// </summary>
         public enum HealerRotationMode
         {
-            Manual          = 0,
+            Manual = 0,
             Highest_Current = 1,
-            Lowest_Current  = 2
+            Lowest_Current = 2
             //Self_Priority,
             //Tank_Priority,
             //Healer_Priority,
@@ -518,7 +518,7 @@ namespace AutoDuty.IPC
         public static bool DoThing(Func<SetResult> action)
         {
             SetResult result = action();
-            bool      check  = result.CheckResult();
+            bool check = result.CheckResult();
             if (!check && result == SetResult.InvalidLease)
                 check = action().CheckResult();
             return check;
@@ -551,7 +551,7 @@ namespace AutoDuty.IPC
             }
         }
 
-        internal static bool SetJobAutoReady() => 
+        internal static bool SetJobAutoReady() =>
             Register() && DoThing(() => SetCurrentJobAutoRotationReady(_curLease!.Value));
 
         internal static void SetAutoMode(bool on)
@@ -561,10 +561,10 @@ namespace AutoDuty.IPC
                 bool autoRotationState = DoThing(() => SetAutoRotationState(_curLease!.Value, on));
                 if (autoRotationState && on)
                 {
-                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.InCombatOnly,       false);
-                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.AutoRez,            true);
-                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.AutoRezDPSJobs,     true);
-                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.IncludeNPCs,        true);
+                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.InCombatOnly, false);
+                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.AutoRez, true);
+                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.AutoRezDPSJobs, true);
+                    SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.IncludeNPCs, true);
                     SetAutoRotationConfigState(_curLease.Value, AutoRotationConfigOption.OnlyAttackInCombat, false);
 
                     DPSRotationMode dpsConfig = Plugin.CurrentPlayerItemLevelandClassJob.Value.GetCombatRole() == CombatRole.Tank ?
@@ -595,7 +595,7 @@ namespace AutoDuty.IPC
 
         internal static void CancelActions(int reason, string s)
         {
-            switch ((CancellationReason) reason)
+            switch ((CancellationReason)reason)
             {
                 case CancellationReason.WrathUserManuallyCancelled:
                     Plugin.Configuration.AutoManageRotationPluginState = false;
@@ -610,7 +610,7 @@ namespace AutoDuty.IPC
             }
 
             _curLease = null;
-            Svc.Log.Info($"Wrath lease cancelled via {(CancellationReason) reason} for: {s}");
+            Svc.Log.Info($"Wrath lease cancelled via {(CancellationReason)reason} for: {s}");
         }
 
         internal static void Release()

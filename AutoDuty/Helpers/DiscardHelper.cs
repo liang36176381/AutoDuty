@@ -12,7 +12,7 @@ namespace AutoDuty.Helpers
 
     internal class DiscardHelper : ActiveHelperBase<DiscardHelper>
     {
-        protected override string Name        { get; } = nameof(DiscardHelper);
+        protected override string Name { get; } = nameof(DiscardHelper);
         protected override string DisplayName { get; } = "Discarding Items";
 
         private bool started = false;
@@ -23,7 +23,7 @@ namespace AutoDuty.Helpers
             this.started = false;
         }
 
-        protected override unsafe void   HelperUpdate(IFramework framework)
+        protected override unsafe void HelperUpdate(IFramework framework)
         {
             if (!this.UpdateBase() || !PlayerHelper.IsReadyFull)
                 return;
@@ -33,7 +33,7 @@ namespace AutoDuty.Helpers
                 this.started = true;
                 return;
             }
-            if(!DiscardHelper_IPCSubscriber.IsRunning())
+            if (!DiscardHelper_IPCSubscriber.IsRunning())
                 this.Stop();
         }
     }

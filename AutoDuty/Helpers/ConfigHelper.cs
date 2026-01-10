@@ -41,7 +41,8 @@ namespace AutoDuty.Helpers
             {
                 if (Enum.TryParse(configType, configValue, true, out object? configEnum))
                     return configEnum;
-            } else if (configType is { IsGenericType: true, IsGenericTypeDefinition: false } && configType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            }
+            else if (configType is { IsGenericType: true, IsGenericTypeDefinition: false } && configType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 return Activator.CreateInstance(configType, ModifyConfig(configType.GetGenericArguments()[0], configValue, out failReason));
             }
@@ -76,8 +77,8 @@ namespace AutoDuty.Helpers
 
                 if (configType.IsAssignableTo(typeof(IList)))
                 {
-                    IList valueList          = (IList) field.GetValue(Plugin.Configuration)!;
-                    Type        enumerableType = configType.GetElementType() ?? configType.GenericTypeArguments.First();
+                    IList valueList = (IList)field.GetValue(Plugin.Configuration)!;
+                    Type enumerableType = configType.GetElementType() ?? configType.GenericTypeArguments.First();
 
                     switch (configValues[0])
                     {
@@ -138,7 +139,7 @@ namespace AutoDuty.Helpers
                             for (int i = 1; i < configValues.Length; i++)
                             {
                                 object? entry = ModifyConfig(enumerableType, configValues[i], out string _);
-                                
+
                                 if (entry != null)
                                 {
                                     int index = valueList.IndexOf(entry);
@@ -157,7 +158,7 @@ namespace AutoDuty.Helpers
                                 {
                                     object? entry = ModifyConfig(enumerableType, configValues[i], out string _);
 
-                                    if (entry != null) 
+                                    if (entry != null)
                                         valueList.Insert(insertIndex++, entry);
                                 }
 
@@ -185,7 +186,7 @@ namespace AutoDuty.Helpers
             if (i == null) return;
             foreach (var field in i)
             {
-                if (!field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase) && !field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version",StringComparison.InvariantCultureIgnoreCase))
+                if (!field.FieldType.ToString().Contains("Dalamud.Plugin", StringComparison.InvariantCultureIgnoreCase) && !field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals("Version", StringComparison.InvariantCultureIgnoreCase))
                     Svc.Log.Info($"{field.Name.Replace(">k__BackingField", "").Replace("<", "")} = {field.GetValue(Plugin.Configuration)} ({field.FieldType.ToString().Replace("System.", "")})");
             }
         }
@@ -199,7 +200,7 @@ namespace AutoDuty.Helpers
                     continue;
                 if (field.Name.Replace(">k__BackingField", "").Replace("<", "").Equals(configName, StringComparison.InvariantCultureIgnoreCase))
                     return field;
-                
+
             }
             return null;
         }

@@ -21,7 +21,8 @@ namespace AutoDuty.Helpers
             set
             {
                 _enabled = value;
-                if (value && !_updateHooked) {
+                if (value && !_updateHooked)
+                {
                     _updateHooked = true;
                     Svc.Framework.Update += FollowUpdate;
                 }
@@ -48,7 +49,7 @@ namespace AutoDuty.Helpers
             }
             if (followDistance > 0)
                 _followDistance = followDistance;
-        } 
+        }
 
         internal static void SetFollowTarget(IGameObject? gameObject) => _followTarget = gameObject;
 

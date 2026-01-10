@@ -70,7 +70,7 @@ namespace AutoDuty.Data
             return outString;
         }
 
-        public static string ToCustomString(this PathAction pathAction) =>$"{(pathAction.Tag.HasAnyFlag(ActionTag.None, ActionTag.Treasure, ActionTag.Revival) ? "" : $"{pathAction.Tag.ToCustomString()}|")}{pathAction.Name}|{pathAction.Position.ToCustomString()}{(pathAction.Arguments.All(x => x.IsNullOrEmpty()) ? "" : $"|{pathAction.Arguments.ToCustomString()}")}{(pathAction.Note.IsNullOrEmpty() ? "" : $"|{pathAction.Note}")}";
+        public static string ToCustomString(this PathAction pathAction) => $"{(pathAction.Tag.HasAnyFlag(ActionTag.None, ActionTag.Treasure, ActionTag.Revival) ? "" : $"{pathAction.Tag.ToCustomString()}|")}{pathAction.Name}|{pathAction.Position.ToCustomString()}{(pathAction.Arguments.All(x => x.IsNullOrEmpty()) ? "" : $"|{pathAction.Arguments.ToCustomString()}")}{(pathAction.Note.IsNullOrEmpty() ? "" : $"|{pathAction.Note}")}";
 
         public static string ToCustomString(this Vector3 vector3) => vector3.ToString("F2", CultureInfo.InvariantCulture).Trim('<', '>');
 
@@ -108,7 +108,7 @@ namespace AutoDuty.Data
             var splitString = vector3String.Replace(" ", string.Empty, strcomp).Replace("<", string.Empty, strcomp).Replace(">", string.Empty, strcomp).Split(",");
 
             if (splitString.Length < 3) return false;
-            
+
             vector3 = new(float.Parse(splitString[0], cul), float.Parse(splitString[1], cul), float.Parse(splitString[2], cul));
 
             return true;

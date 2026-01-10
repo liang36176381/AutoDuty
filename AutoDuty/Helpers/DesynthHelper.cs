@@ -13,7 +13,7 @@ namespace AutoDuty.Helpers
 
     internal class DesynthHelper : ActiveHelperBase<DesynthHelper>
     {
-        protected override string Name        => nameof(DesynthHelper);
+        protected override string Name => nameof(DesynthHelper);
         protected override string DisplayName => "Desynthing";
 
         protected override string[] AddonsToClose { get; } = ["Desynth", "SalvageResult", "SalvageDialog", "SalvageItemSelector"];
@@ -63,7 +63,7 @@ namespace AutoDuty.Helpers
                 AddonHelper.FireCallBack(addonSalvageDialog, true, 0, false);
                 return;
             }
-            
+
             if (!GenericHelpers.TryGetAddonByName<AddonSalvageItemSelector>("SalvageItemSelector", out var addonSalvageItemSelector))
             {
                 AgentSalvage.Instance()->AgentInterface.Show();
@@ -86,7 +86,7 @@ namespace AutoDuty.Helpers
                     {
                         var item = AgentSalvage.Instance()->ItemList[i];
                         var itemId = InventoryManager.Instance()->GetInventorySlot(item.InventoryType, (int)item.InventorySlot)->ItemId;
-                            
+
                         if (itemId == 10146) continue;
 
                         var itemSheetRow = Svc.Data.Excel.GetSheet<Item>()?.GetRow(itemId);

@@ -51,40 +51,40 @@ namespace AutoDuty.Helpers
                 int repairIndex = npcBase.ENpcData.IndexOf(x => x.RowId == 720915);
                 if (repairIndex >= 0)
                 {
-                    Level   level         = levelSheet.FirstOrDefault(y => y.Object.RowId == npcBase.RowId);
-                    Vector3 position      = Vector3.Zero;
-                    uint    territoryType = 0;
+                    Level level = levelSheet.FirstOrDefault(y => y.Object.RowId == npcBase.RowId);
+                    Vector3 position = Vector3.Zero;
+                    uint territoryType = 0;
 
                     if (level.RowId != default)
                     {
                         if (level.Territory.Value.RowId != 0 || level.Territory.Value.TerritoryIntendedUse.RowId != 0)
                         {
                             var npc = cityENpcResidents.FirstOrDefault(x => x.DataId == npcBase.RowId);
-                            if (npc == null) 
+                            if (npc == null)
                                 continue;
 
                             RepairNPCs.Add(new RepairNpcData
-                                           {
-                                               DataId        = npc.DataId,
-                                               Name          = npc.Name,
-                                               Position      = npc.Position,
-                                               TerritoryType = npc.TerritoryType,
-                                               RepairIndex   = repairIndex
-                                           });
+                            {
+                                DataId = npc.DataId,
+                                Name = npc.Name,
+                                Position = npc.Position,
+                                TerritoryType = npc.TerritoryType,
+                                RepairIndex = repairIndex
+                            });
                         }
                         else
                         {
                             var npc = enpcResidentsSheet.GetRow(npcBase.RowId);
-                            position      = new Vector3(level.X, level.Y, level.Z);
+                            position = new Vector3(level.X, level.Y, level.Z);
                             territoryType = level.Territory.Value.RowId;
                             RepairNPCs.Add(new RepairNpcData
-                                           {
-                                               DataId        = npcBase.RowId,
-                                               Name          = npc.Singular.ToString(),
-                                               Position      = position,
-                                               TerritoryType = territoryType,
-                                               RepairIndex   = repairIndex
-                                           });
+                            {
+                                DataId = npcBase.RowId,
+                                Name = npc.Singular.ToString(),
+                                Position = position,
+                                TerritoryType = territoryType,
+                                RepairIndex = repairIndex
+                            });
                         }
                     }
                 }
@@ -106,16 +106,16 @@ namespace AutoDuty.Helpers
                 {
                     foreach (var instanceObject in sLgbGroup.InstanceObjects)
                     {
-                        if (instanceObject.AssetType != LayerEntryType.EventNPC)  continue;
-                    
+                        if (instanceObject.AssetType != LayerEntryType.EventNPC) continue;
+
                         var eNPCInstanceObject = (LayerCommon.ENPCInstanceObject)instanceObject.Object;
                         var eNpcResidentDataId = eNPCInstanceObject.ParentData.ParentData.BaseId;
-                        
+
                         if (eNpcResidentDataId == 0) continue;
 
                         var eNpcResident = Svc.Data.GetExcelSheet<ENpcResident>()?.GetRow(eNpcResidentDataId);
                         var eNpcBase = Svc.Data.GetExcelSheet<ENpcBase>()?.GetRow(eNpcResidentDataId);
-                        
+
                         if (eNpcBase == null || eNpcResident == null) continue;
 
                         cityENpcResidents.Add(new ENpcResidentData
@@ -128,7 +128,7 @@ namespace AutoDuty.Helpers
                     }
                 }
             }
-            
+
         }
         private static LgbFile? GetLgbFile(TerritoryType territoryType) => Svc.Data.GetFile<LgbFile>($"bg/{territoryType.Bg.ToString()[..(territoryType.Bg.ToString().IndexOf("/level/") + 1)]}level/planevent.lgb");
     }

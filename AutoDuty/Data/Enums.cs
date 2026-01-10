@@ -14,13 +14,13 @@ namespace AutoDuty.Data
         [Flags]
         public enum ActionTag
         {
-            None     = 0,
-            Synced   = 1 << 0,
+            None = 0,
+            Synced = 1 << 0,
             Unsynced = 1 << 1,
-            Comment  = 1 << 2,
-            Revival  = 1 << 3,
+            Comment = 1 << 2,
+            Revival = 1 << 3,
             Treasure = 1 << 4,
-            W2W      = 1 << 5
+            W2W = 1 << 5
         }
 
         public enum ClassJobType
@@ -72,38 +72,38 @@ namespace AutoDuty.Data
         [Flags]
         public enum JobWithRole
         {
-            None        = 0,
-            Paladin     = 1 << 0,
-            Warrior     = 1 << 1,
+            None = 0,
+            Paladin = 1 << 0,
+            Warrior = 1 << 1,
             Dark_Knight = 1 << 2,
-            Gunbreaker  = 1 << 3,
-            Tanks       = Paladin | Warrior | Dark_Knight | Gunbreaker,
-            White_Mage  = 1 << 4,
-            Scholar     = 1 << 5,
+            Gunbreaker = 1 << 3,
+            Tanks = Paladin | Warrior | Dark_Knight | Gunbreaker,
+            White_Mage = 1 << 4,
+            Scholar = 1 << 5,
             Astrologian = 1 << 6,
-            Sage        = 1 << 7,
-            Healers     = White_Mage | Scholar | Astrologian | Sage,
-            Monk        = 1 << 8,
-            Dragoon     = 1 << 9,
-            Ninja       = 1 << 10,
-            Samurai     = 1 << 11,
-            Reaper      = 1 << 12,
-            Viper       = 1 << 13,
-            Striking    = Monk     | Samurai,
-            Maiming     = Dragoon  | Reaper,
-            Scouting    = Ninja    | Viper,
-            Melee       = Striking | Maiming | Scouting,
-            Bard        = 1 << 14,
-            Machinist   = 1 << 15,
-            Dancer      = 1 << 16,
-            Aiming      = Bard | Machinist | Dancer,
-            Black_Mage  = 1 << 17,
-            Summoner    = 1 << 18,
-            Red_Mage    = 1 << 19,
+            Sage = 1 << 7,
+            Healers = White_Mage | Scholar | Astrologian | Sage,
+            Monk = 1 << 8,
+            Dragoon = 1 << 9,
+            Ninja = 1 << 10,
+            Samurai = 1 << 11,
+            Reaper = 1 << 12,
+            Viper = 1 << 13,
+            Striking = Monk | Samurai,
+            Maiming = Dragoon | Reaper,
+            Scouting = Ninja | Viper,
+            Melee = Striking | Maiming | Scouting,
+            Bard = 1 << 14,
+            Machinist = 1 << 15,
+            Dancer = 1 << 16,
+            Aiming = Bard | Machinist | Dancer,
+            Black_Mage = 1 << 17,
+            Summoner = 1 << 18,
+            Red_Mage = 1 << 19,
             Pictomancer = 1 << 20,
-            Casters     = Black_Mage | Summoner | Red_Mage | Pictomancer,
-            DPS         = Melee      | Aiming   | Casters,
-            All         = Tanks      | Healers  | DPS 
+            Casters = Black_Mage | Summoner | Red_Mage | Pictomancer,
+            DPS = Melee | Aiming | Casters,
+            All = Tanks | Healers | DPS
         }
 
         public enum JobRole
@@ -396,8 +396,8 @@ namespace AutoDuty.Data
         public static void DrawSelectable(JobWithRole jwr, ref JobWithRole config, bool allowRemoval = true)
         {
             int flag = (int)config;
-            
-            using(ImRaii.Disabled(!allowRemoval && config.HasFlag(jwr)))
+
+            using (ImRaii.Disabled(!allowRemoval && config.HasFlag(jwr)))
             {
                 if (ImGui.CheckboxFlags(jwr.ToString().Replace("_", " "), ref flag, (int)jwr))
                 {
@@ -409,9 +409,9 @@ namespace AutoDuty.Data
 
         public static void DrawCategory(JobWithRole category, ref JobWithRole config, bool allowRemoval = true)
         {
-            ImGui.PushStyleColor(ImGuiCol.Header,        Vector4.Zero);
+            ImGui.PushStyleColor(ImGuiCol.Header, Vector4.Zero);
             ImGui.PushStyleColor(ImGuiCol.HeaderHovered, new Vector4(0.2f));
-            ImGui.PushStyleColor(ImGuiCol.HeaderActive,  new Vector4(0.3f));
+            ImGui.PushStyleColor(ImGuiCol.HeaderActive, new Vector4(0.3f));
             bool collapse = ImGui.CollapsingHeader("##" + category, ImGuiTreeNodeFlags.AllowItemOverlap);
             ImGui.PopStyleColor(3);
             ImGui.SameLine();

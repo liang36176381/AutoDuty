@@ -8,13 +8,13 @@
 
     internal class PortraitHelper : ActiveHelperBase<PortraitHelper>
     {
-        protected override string Name        { get; } = nameof(PortraitHelper);
+        protected override string Name { get; } = nameof(PortraitHelper);
         protected override string DisplayName { get; } = "Updating Portrait";
-        protected override int    TimeOut     { get; set; } = 10_000;
+        protected override int TimeOut { get; set; } = 10_000;
 
         internal override void Start()
         {
-            if (Svc.ClientState.TerritoryType != 0) 
+            if (Svc.ClientState.TerritoryType != 0)
                 base.Start();
         }
 

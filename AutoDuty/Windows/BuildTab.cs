@@ -28,31 +28,31 @@ namespace AutoDuty.Windows
     {
         internal static List<(string, string, string)>? ActionsList { get; set; }
 
-        private static          bool                     _scrollBottom      = false;
-        private static          string                   _changelog         = string.Empty;
-        private static          PathAction?              _action            = null;
-        private static          string                   _actionText        = string.Empty;
-        private static          string                   _note              = string.Empty;
-        private static          Vector3                  _position          = Vector3.Zero;
+        private static bool _scrollBottom = false;
+        private static string _changelog = string.Empty;
+        private static PathAction? _action = null;
+        private static string _actionText = string.Empty;
+        private static string _note = string.Empty;
+        private static Vector3 _position = Vector3.Zero;
         //private static          string                   _positionText      = string.Empty;
-        private static          List<string>             _arguments          = [];
-        private static          string                   _argumentHint       = string.Empty;
-        private static          bool                     _dontMove           = false;
-        private static          bool                     _showAddActionUI    = false;
-        private static          (string, string, string) _dropdownSelected   = (string.Empty, string.Empty, string.Empty);
-        private static          int                      _buildListSelected  = -1;
-        private static          string                   _addActionButton    = "Add";
-        private static          bool                     _dragDrop           = false;
-        private static          bool                     _noArgument         = false;
-        private static          bool                     _comment            = false;
-        private static          Vector4                  _argumentTextColor  = new(1,1,1,1);
-        private static          bool                     _deleteItem         = false;
-        private static          int                      _deleteItemIndex    = -1;
-        private static          bool                     _duplicateItem      = false;
-        private static          int                      _duplicateItemIndex = -1;
-        private static          ActionTag                _actionTag;
-        private static readonly ActionTag[]              _actionTags           = [ActionTag.None, ActionTag.Synced, ActionTag.Unsynced, ActionTag.W2W, ActionTag.Treasure];
-        public static readonly  JsonSerializerOptions    jsonSerializerOptions = new() { WriteIndented = true, IgnoreReadOnlyProperties = true, IncludeFields = true };
+        private static List<string> _arguments = [];
+        private static string _argumentHint = string.Empty;
+        private static bool _dontMove = false;
+        private static bool _showAddActionUI = false;
+        private static (string, string, string) _dropdownSelected = (string.Empty, string.Empty, string.Empty);
+        private static int _buildListSelected = -1;
+        private static string _addActionButton = "Add";
+        private static bool _dragDrop = false;
+        private static bool _noArgument = false;
+        private static bool _comment = false;
+        private static Vector4 _argumentTextColor = new(1, 1, 1, 1);
+        private static bool _deleteItem = false;
+        private static int _deleteItemIndex = -1;
+        private static bool _duplicateItem = false;
+        private static int _duplicateItemIndex = -1;
+        private static ActionTag _actionTag;
+        private static readonly ActionTag[] _actionTags = [ActionTag.None, ActionTag.Synced, ActionTag.Unsynced, ActionTag.W2W, ActionTag.Treasure];
+        public static readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true, IgnoreReadOnlyProperties = true, IncludeFields = true };
 
         internal static unsafe void Draw()
         {
@@ -247,7 +247,7 @@ namespace AutoDuty.Windows
             using (ImRaii.Disabled(Plugin.PathFile.IsNullOrEmpty()))
             {
                 if (ImGuiEx.ButtonWrapped("Open File"))
-                    Process.Start("explorer",  Plugin.PathFile ?? string.Empty);
+                    Process.Start("explorer", Plugin.PathFile ?? string.Empty);
             }
         }
 
@@ -321,14 +321,14 @@ namespace AutoDuty.Windows
 
                     using (ImRaii.Disabled(i <= 0))
                     {
-                        if (ImGui.Button("↑##MoveUp")) 
+                        if (ImGui.Button("↑##MoveUp"))
                             (_arguments[i], _arguments[i - 1]) = (_arguments[i - 1], _arguments[i]);
                     }
 
                     ImGui.SameLine();
                     using (ImRaii.Disabled(i >= _arguments.Count - 1))
                     {
-                        if (ImGui.Button("↓##MoveDown")) 
+                        if (ImGui.Button("↓##MoveDown"))
                             (_arguments[i], _arguments[i + 1]) = (_arguments[i + 1], _arguments[i]);
                     }
 
@@ -350,7 +350,7 @@ namespace AutoDuty.Windows
 
                     ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                     string tempArgument = _arguments[i];
-                    if (ImGui.InputText($"##Argument{i}", ref tempArgument, 200)) 
+                    if (ImGui.InputText($"##Argument{i}", ref tempArgument, 200))
                         _arguments[i] = tempArgument;
                     ImGui.PopID();
                 }
@@ -411,7 +411,7 @@ namespace AutoDuty.Windows
                 if (Plugin.InDungeon)
                 {
                     int? dragIndex = null;
-                    int? dragNext  = null;
+                    int? dragNext = null;
 
 
                     foreach (var item in Plugin.Actions.Select((Value, Index) => (Value, Index)))
@@ -432,34 +432,34 @@ namespace AutoDuty.Windows
                                 _noArgument = (ActionsList?.Any(x => x.Item1.Equals($"{item.Value.Name}", StringComparison.InvariantCultureIgnoreCase) &&
                                                                      x.Item2.Equals("false", StringComparison.InvariantCultureIgnoreCase)) ??
                                                false); // || item.Value.Name.Equals("MoveTo", StringComparison.InvariantCultureIgnoreCase);
-                                _dontMove          = item.Value.Position == Vector3.Zero;
-                                _actionText        = item.Value.Name;
-                                _note              = item.Value.Note;
-                                _arguments         = [..item.Value.Arguments];
-                                _position          = item.Value.Position;
+                                _dontMove = item.Value.Position == Vector3.Zero;
+                                _actionText = item.Value.Name;
+                                _note = item.Value.Note;
+                                _arguments = [.. item.Value.Arguments];
+                                _position = item.Value.Position;
                                 //_positionText      = _position.ToCustomString();
                                 _buildListSelected = item.Index;
-                                _showAddActionUI   = true;
-                                _dropdownSelected  = ("", "", "");
-                                _addActionButton   = "Modify";
-                                _action            = item.Value;
-                                _actionTag         = item.Value.Tag;
+                                _showAddActionUI = true;
+                                _dropdownSelected = ("", "", "");
+                                _addActionButton = "Modify";
+                                _action = item.Value;
+                                _actionTag = item.Value.Tag;
                             }
                         }
 
                         if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                         {
-                            _deleteItem      = true;
+                            _deleteItem = true;
                             _deleteItemIndex = item.Index;
                         }
 
                         if (ImGui.IsItemClicked(ImGuiMouseButton.Middle))
                         {
-                            _duplicateItem      = true;
+                            _duplicateItem = true;
                             _duplicateItemIndex = item.Index;
                         }
 
-                        if (ImGui.IsItemActive() && !ImGui.IsItemHovered() && !_dragDrop) 
+                        if (ImGui.IsItemActive() && !ImGui.IsItemHovered() && !_dragDrop)
                             _buildListSelected = item.Index;
 
                         if (_buildListSelected == item.Index && ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_showAddActionUI)
@@ -470,7 +470,7 @@ namespace AutoDuty.Windows
                             {
                                 _dragDrop = true;
                                 dragIndex = item.Index;
-                                dragNext  = item.Index + (mouseYDelta < 0f ? -1 : 1);
+                                dragNext = item.Index + (mouseYDelta < 0f ? -1 : 1);
                             }
                         }
 
@@ -485,12 +485,12 @@ namespace AutoDuty.Windows
                     if (dragIndex.HasValue && dragNext is >= 0 && dragNext < Plugin.Actions.Count)
                     {
                         (Plugin.Actions[dragNext.Value], Plugin.Actions[dragIndex.Value]) = (Plugin.Actions[dragIndex.Value], Plugin.Actions[dragNext.Value]);
-                        _buildListSelected                                                = dragNext.Value;
+                        _buildListSelected = dragNext.Value;
                         ImGui.ResetMouseDragDelta();
                     }
-                    else if(!ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_showAddActionUI)
+                    else if (!ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_showAddActionUI)
                     {
-                        _dragDrop          = false;
+                        _dragDrop = false;
                         _buildListSelected = -1;
                     }
 
@@ -498,7 +498,7 @@ namespace AutoDuty.Windows
                     {
                         Plugin.Actions.RemoveAt(_deleteItemIndex);
                         _deleteItemIndex = -1;
-                        _deleteItem      = false;
+                        _deleteItem = false;
                     }
 
                     if (_duplicateItem)
@@ -565,17 +565,17 @@ namespace AutoDuty.Windows
                 drawList.AddText(_position + Vector3.UnitZ * 1.1f, 0xFFFFFFFF, "+Z", 5f);
                 drawList.AddText(_position + Vector3.UnitZ * -1.1f, 0xFFFFFFFF, "-Z", 5f);
 
-                drawList.AddText(_position + Vector3.UnitX * 1.1f,  0xFFFFFFFF, "+X", 5f);
+                drawList.AddText(_position + Vector3.UnitX * 1.1f, 0xFFFFFFFF, "+X", 5f);
                 drawList.AddText(_position + Vector3.UnitX * -1.1f, 0xFFFFFFFF, "-X", 5f);
 
-                if(PlayerHelper.IsValid)
+                if (PlayerHelper.IsValid)
                 {
-                    float playerY   = Player.Position.Y;
+                    float playerY = Player.Position.Y;
                     float ydiff = (_position.Y - playerY);
                     if (MathF.Abs(ydiff) > 0.1f)
                     {
                         drawList.AddText(_position + Vector3.UnitY * MathF.Sign(ydiff), 0xFFFFFFFF, "Y-Diff: " + ydiff.ToString("F3", CultureInfo.CurrentCulture), 5f);
-                        
+
                         drawList.PathLineTo(_position);
                         drawList.PathLineTo(_position.WithY(playerY));
                         drawList.PathStroke(0xFFFFFFFF);

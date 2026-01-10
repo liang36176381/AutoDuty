@@ -24,7 +24,7 @@ namespace AutoDuty.Windows
     {
         //private static Dictionary<CombatRole, Job[]> _jobs = Enum.GetValues<Job>().Where(j => !j.IsUpgradeable() && j != Job.BLU).GroupBy(j => j.GetRole()).Where(ig => ig.Key != CombatRole.NonCombat).ToDictionary(ig => ig.Key, ig => ig.ToArray());
         private static ContentPathsManager.DutyPath? _selectedDutyPath;
-        private static bool                          _checked = false;
+        private static bool _checked = false;
 
         private static readonly Dictionary<uint, bool> headers = [];
 
@@ -83,13 +83,13 @@ namespace AutoDuty.Windows
             bool anyHeaderOpen = headers.Values.Any(b => b);
             if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "Collapse All" : "Reveal All"))
             {
-                foreach (uint key in headers.Keys) 
+                foreach (uint key in headers.Keys)
                     headers[key] = !anyHeaderOpen;
             }
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
-                if (ImGuiEx.ButtonWrapped("Download Paths")) 
+                if (ImGuiEx.ButtonWrapped("Download Paths"))
                     Patcher.Patch(ImGui.IsMouseClicked(ImGuiMouseButton.Right));
             }
             bool showJobSelection = _selectedDutyPath is { container.Paths.Count: > 1 };
@@ -99,10 +99,10 @@ namespace AutoDuty.Windows
             ImGui.PushStyleColor(ImGuiCol.ChildBg, style.Colors[(int)ImGuiCol.FrameBg]);
             ImGui.PushStyleVar(ImGuiStyleVar.ChildRounding, style.FrameRounding);
             ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize, style.FrameBorderSize);
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding,   style.FramePadding);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, style.FramePadding);
 
-            float dutyListWidth = showJobSelection ? ImGui.GetContentRegionAvail().X/3*2 : ImGui.GetContentRegionAvail().X;
-            
+            float dutyListWidth = showJobSelection ? ImGui.GetContentRegionAvail().X / 3 * 2 : ImGui.GetContentRegionAvail().X;
+
             ImGui.BeginChild("##DutyList", new Vector2(dutyListWidth, 0), false,
                              ImGuiWindowFlags.HorizontalScrollbar | ImGuiWindowFlags.AlwaysVerticalScrollbar);
             try
@@ -123,7 +123,7 @@ namespace AutoDuty.Windows
                         ImGuiHelper.ColoredText(container.ColoredNameRegex, $"({container.id}) {container.Content.Name}");
                     }
 
-                    List<Tuple<CombatRole, Job>>[]   pathJobs       = Enumerable.Range(0, container.Paths.Count).Select(_ => new List<Tuple<CombatRole, Job>>()).ToArray();
+                    List<Tuple<CombatRole, Job>>[] pathJobs = Enumerable.Range(0, container.Paths.Count).Select(_ => new List<Tuple<CombatRole, Job>>()).ToArray();
                     Dictionary<string, JobWithRole>? pathSelections = null;
                     if (open)
                     {
@@ -147,7 +147,7 @@ namespace AutoDuty.Windows
                                 }
                                 else
                                 {
-                                    _checked          = Plugin.Configuration.DoNotUpdatePathFiles.Contains(path.FileName);
+                                    _checked = Plugin.Configuration.DoNotUpdatePathFiles.Contains(path.FileName);
                                     _selectedDutyPath = path;
                                 }
 
@@ -176,9 +176,9 @@ namespace AutoDuty.Windows
                             {
                                 if (pathSelections.TryGetValue(path.FileName, out JobWithRole jobs))
                                 {
-                                    if(jobs == JobWithRole.None)
+                                    if (jobs == JobWithRole.None)
                                         continue;
-                                    
+
                                     ImGui.SameLine(0, 15);
                                     ImGui.Spacing();
                                     ImGui.AlignTextToFramePadding();
@@ -193,9 +193,9 @@ namespace AutoDuty.Windows
                                         }
                                     }
 
-                                    DrawRole(JobWithRole.DPS,   ImGuiHelper.RoleDPSColor);
+                                    DrawRole(JobWithRole.DPS, ImGuiHelper.RoleDPSColor);
                                     DrawRole(JobWithRole.Healers, ImGuiHelper.RoleHealerColor);
-                                    DrawRole(JobWithRole.Tanks,   ImGuiHelper.RoleTankColor);
+                                    DrawRole(JobWithRole.Tanks, ImGuiHelper.RoleTankColor);
                                 }
                             }
                         }
@@ -216,7 +216,7 @@ namespace AutoDuty.Windows
             if (showJobSelection)
             {
                 ImGui.NextColumn();
-                ImGui.Indent(ImGui.GetContentRegionAvail().X / 3*2);
+                ImGui.Indent(ImGui.GetContentRegionAvail().X / 3 * 2);
 
                 ImGui.BeginChild("##PathsTabJobConfigurationHeader");
 
@@ -238,24 +238,24 @@ namespace AutoDuty.Windows
                 ImGui.BeginChild("##PathsTabJobConfiguration", new Vector2(ImGui.GetContentRegionAvail().X, 0), false, ImGuiWindowFlags.HorizontalScrollbar | ImGuiWindowFlags.AlwaysVerticalScrollbar);
 
 
-                bool        firstPath   = _selectedDutyPath.container.IsFirstPath(_selectedDutyPath);
+                bool firstPath = _selectedDutyPath.container.IsFirstPath(_selectedDutyPath);
                 JobWithRole jwr = JobWithRole.None;
 
                 PathSelectionHelper.AddPathSelectionEntry(_selectedDutyPath.container.id);
 
                 if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(_selectedDutyPath.container.id, out Dictionary<string, JobWithRole>? pathSelections))
-                    if (pathSelections!.TryGetValue(_selectedDutyPath.FileName, out JobWithRole dutyRoles)) 
+                    if (pathSelections!.TryGetValue(_selectedDutyPath.FileName, out JobWithRole dutyRoles))
                         jwr = dutyRoles;
 
                 JobWithRole jwrCheck = jwr;
 
                 JobWithRoleHelper.DrawCategory(JobWithRole.All, ref jwr);
 
-                if(jwr != jwrCheck)
+                if (jwr != jwrCheck)
                 {
                     Dictionary<string, JobWithRole> pathJobConfigs = Plugin.Configuration.PathSelectionsByPath[_selectedDutyPath.container.id]!;
 
-                    foreach (string key in pathJobConfigs.Keys) 
+                    foreach (string key in pathJobConfigs.Keys)
                         pathJobConfigs[key] &= ~jwr;
 
                     pathJobConfigs[_selectedDutyPath.FileName] = jwr;

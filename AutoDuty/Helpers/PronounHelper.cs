@@ -17,9 +17,9 @@ public static unsafe class PronounHelper
 
     // They/Them, personally
 
-    public static bool FullyReady    => PronounsReady && MethodsReady;
-    public static bool PronounsReady => PronounModule.Value               != IntPtr.Zero;
-    public static bool MethodsReady  => GetGameObjectPointerFromPronounID != null;
+    public static bool FullyReady => PronounsReady && MethodsReady;
+    public static bool PronounsReady => PronounModule.Value != IntPtr.Zero;
+    public static bool MethodsReady => GetGameObjectPointerFromPronounID != null;
 
     public static PronounModule* Module => (PronounModule*)PronounModule.Value;
 

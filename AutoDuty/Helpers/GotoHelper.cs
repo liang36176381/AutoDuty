@@ -14,7 +14,7 @@ namespace AutoDuty.Helpers
 
     internal class GotoHelper : ActiveHelperBase<GotoHelper>
     {
-        protected override string Name        { get; } = nameof(GotoHelper);
+        protected override string Name { get; } = nameof(GotoHelper);
         protected override string DisplayName { get; } = string.Empty;
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno"];
@@ -30,7 +30,7 @@ namespace AutoDuty.Helpers
         internal static void Invoke(uint territoryType, List<Vector3> moveLocations) => Invoke(territoryType, moveLocations, 0, 0.25f, 0.25f, false, false, true);
 
         internal static void Invoke(uint territoryType, uint gameObjectDataId, float tollerance = 0.25f, float lastPointTollerance = 0.25f, bool useAethernetTravel = false, bool useFlight = false, bool useMesh = true) => Invoke(territoryType, [], gameObjectDataId, tollerance, lastPointTollerance, useAethernetTravel, useFlight, useMesh);
-        
+
         internal static void Invoke(uint territoryType, Vector3 moveLocation, float tollerance = 0.25f, float lastPointTollerance = 0.25f, bool useAethernetTravel = false, bool useFlight = false, bool useMesh = true) => Invoke(territoryType, [moveLocation], 0, tollerance, lastPointTollerance, useAethernetTravel, useFlight, useMesh);
 
         internal static void Invoke(uint territoryType, List<Vector3> moveLocations, float tollerance = 0.25f, float lastPointTollerance = 0.25f, bool useAethernetTravel = false, bool useFlight = false, bool useMesh = true) => Invoke(territoryType, moveLocations, 0, tollerance, lastPointTollerance, useAethernetTravel, useFlight, useMesh);
@@ -40,7 +40,7 @@ namespace AutoDuty.Helpers
             if (State != ActionState.Running)
             {
                 Svc.Log.Info($"Goto Started, Going to {territoryType}{(moveLocations.Count > 0 ? $" and moving to {moveLocations[^1]} using {moveLocations.Count} pathLocations" : "")}");
-                
+
                 _territoryType = territoryType;
                 _gameObjectDataId = gameObjectDataId;
                 _moveLocations = moveLocations;
@@ -53,13 +53,13 @@ namespace AutoDuty.Helpers
             }
         }
 
-        internal override unsafe void Stop() 
+        internal override unsafe void Stop()
         {
-            if (State == ActionState.Running) 
+            if (State == ActionState.Running)
                 this.InfoLog($"Goto Finished");
             Svc.Framework.Update -= this.HelperUpdate;
-            State                =  ActionState.None;
-            Plugin.States        &= ~PluginState.Other;
+            State = ActionState.None;
+            Plugin.States &= ~PluginState.Other;
             if (!Plugin.States.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(true);
 
@@ -120,7 +120,7 @@ namespace AutoDuty.Helpers
             {
                 uint which = _territoryType == 128 ? 1u : (_territoryType == 132 ? 2u : (_territoryType == 130 ? 3u : 0u));
                 bool moveFromInnOrBarracks = _territoryType == 128 || _territoryType == 132 || _territoryType == 130;
-                
+
                 if (moveFromInnOrBarracks && (Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) || Svc.ClientState.TerritoryType == GotoInnHelper.InnTerritoryType(which)))
                 {
                     var exitGameObject = Svc.ClientState.TerritoryType == GotoBarracksHelper.BarracksTerritoryType(which) ? ObjectHelper.GetObjectByDataId(GotoBarracksHelper.ExitBarracksDoorDataId(which)) : ObjectHelper.GetObjectByDataId(GotoInnHelper.ExitInnDoorDataId(which));
@@ -129,7 +129,7 @@ namespace AutoDuty.Helpers
                             AddonHelper.ClickSelectYesno();
                     return;
                 }
-               
+
                 Aetheryte? aetheryte = MapHelper.GetClosestAetheryte(_territoryType, _moveLocations.Count > 0 ? _moveLocations[0] : Vector3.Zero);
                 if (aetheryte == null)
                 {
@@ -159,7 +159,7 @@ namespace AutoDuty.Helpers
                 EzThrottler.Throttle("Goto", 7500, true);
                 return;
             }
-            else if(_useAethernetTravel)
+            else if (_useAethernetTravel)
             {
                 Aetheryte? aetheryteLoc = MapHelper.GetClosestAethernet(_territoryType, _moveLocations.Count > 0 ? _moveLocations[0] : Vector3.Zero);
                 Aetheryte? aetheryteMe = MapHelper.GetClosestAethernet(_territoryType, Svc.ClientState.LocalPlayer.Position);

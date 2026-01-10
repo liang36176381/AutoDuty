@@ -17,7 +17,7 @@ namespace AutoDuty.Helpers
         internal static Dictionary<uint, Content> DictionaryContent { get; set; } = [];
 
         private static List<uint> ListGCArmyContent { get; set; } = [162, 1039, 1041, 1042, 171, 172, 159, 160, 349, 362, 188, 1064, 1066, 430, 510];
-        
+
         private static List<uint> ListVVDContent { get; set; } = [1069, 1137, 1176]; //[1069, 1075, 1076, 1137, 1155, 1156, 1176, 1179, 1180]; *Criterions
 
         private static bool TryGetDawnIndex(uint indexIn, uint ex, out int indexOut)
@@ -63,7 +63,7 @@ namespace AutoDuty.Helpers
 
         internal static void PopulateDuties()
         {
-            var listContentFinderCondition     = Svc.Data.GameData.GetExcelSheet<ContentFinderCondition>();
+            var listContentFinderCondition = Svc.Data.GameData.GetExcelSheet<ContentFinderCondition>();
             var contentFinderConditionsEnglish = Svc.Data.GameData.GetExcelSheet<ContentFinderCondition>(Language.English);
 
             var listDawnContent = Svc.Data.GameData.GetExcelSheet<DawnContent>();
@@ -83,33 +83,33 @@ namespace AutoDuty.Helpers
                     string result = char.ToUpper(name.First()) + name.Substring(1);
                     return result;
                 }
-                
-                DawnContent?           dawnContent      = listDawnContent.FirstOrDefault(x => x.Content.ValueNullable?.RowId == contentFinderCondition.RowId);
+
+                DawnContent? dawnContent = listDawnContent.FirstOrDefault(x => x.Content.ValueNullable?.RowId == contentFinderCondition.RowId);
                 ContentFinderCondition englishCondition = contentFinderConditionsEnglish?.GetRow(contentFinderCondition.RowId) ?? contentFinderCondition;
 
                 var content = new Content
-                              {
-                                  UnlockQuest = dawnContent?.RowId != default(uint) ? dawnContent?.Unknown0 ?? 0 : 0
-                              };
-                content.Id                     = contentFinderCondition.Content.RowId;
-                content.RowId                  = contentFinderCondition.RowId;
-                content.Name                   = CleanName(contentFinderCondition.Name.ToDalamudString().TextValue);
-                content.EnglishName            = CleanName(englishCondition!.Name.ToDalamudString().TextValue);
-                content.TerritoryType          = contentFinderCondition.TerritoryType.Value.RowId;
-                content.ContentType            = contentFinderCondition.ContentType.Value.RowId;
-                content.ContentMemberType      = contentFinderCondition.ContentMemberType.ValueNullable?.RowId ?? 0;
+                {
+                    UnlockQuest = dawnContent?.RowId != default(uint) ? dawnContent?.Unknown0 ?? 0 : 0
+                };
+                content.Id = contentFinderCondition.Content.RowId;
+                content.RowId = contentFinderCondition.RowId;
+                content.Name = CleanName(contentFinderCondition.Name.ToDalamudString().TextValue);
+                content.EnglishName = CleanName(englishCondition!.Name.ToDalamudString().TextValue);
+                content.TerritoryType = contentFinderCondition.TerritoryType.Value.RowId;
+                content.ContentType = contentFinderCondition.ContentType.Value.RowId;
+                content.ContentMemberType = contentFinderCondition.ContentMemberType.ValueNullable?.RowId ?? 0;
                 content.ContentFinderCondition = contentFinderCondition.RowId;
-                content.ExVersion              = contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId;
-                content.ClassJobLevelRequired  = contentFinderCondition.ClassJobLevelRequired;
-                content.ItemLevelRequired      = contentFinderCondition.ItemLevelRequired;
-                content.DawnRowId              = dawnContent?.RowId ?? 0;
-                content.DawnIndex              = TryGetDawnIndex(dawnContent?.RowId ?? 0, contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int dawnIndex) ? dawnIndex : -1;
-                content.DawnIndicator          = (ushort) (dawnContent?.RowId != default(uint) ? dawnContent?.Unknown15 ?? 0u : 0u);
-                content.TrustIndex             = TryGetTrustIndex(listDawnContent.Where(dawnContent => dawnContent.Unknown13).IndexOf(x => x.Content.Value.RowId == contentFinderCondition.RowId), contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int trustIndex) ? trustIndex : -1;
-                content.VariantContent         = ListVVDContent.Any(variantContent => variantContent        == contentFinderCondition.TerritoryType.Value.RowId);
-                content.VVDIndex               = ListVVDContent.FindIndex(variantContent => variantContent  == contentFinderCondition.TerritoryType.Value.RowId);
-                content.GCArmyContent          = ListGCArmyContent.Any(gcArmyContent => gcArmyContent       == contentFinderCondition.TerritoryType.Value.RowId);
-                content.GCArmyIndex            = ListGCArmyContent.FindIndex(gcArmyContent => gcArmyContent == contentFinderCondition.TerritoryType.Value.RowId);
+                content.ExVersion = contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId;
+                content.ClassJobLevelRequired = contentFinderCondition.ClassJobLevelRequired;
+                content.ItemLevelRequired = contentFinderCondition.ItemLevelRequired;
+                content.DawnRowId = dawnContent?.RowId ?? 0;
+                content.DawnIndex = TryGetDawnIndex(dawnContent?.RowId ?? 0, contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int dawnIndex) ? dawnIndex : -1;
+                content.DawnIndicator = (ushort)(dawnContent?.RowId != default(uint) ? dawnContent?.Unknown15 ?? 0u : 0u);
+                content.TrustIndex = TryGetTrustIndex(listDawnContent.Where(dawnContent => dawnContent.Unknown13).IndexOf(x => x.Content.Value.RowId == contentFinderCondition.RowId), contentFinderCondition.TerritoryType.Value.ExVersion.Value.RowId, out int trustIndex) ? trustIndex : -1;
+                content.VariantContent = ListVVDContent.Any(variantContent => variantContent == contentFinderCondition.TerritoryType.Value.RowId);
+                content.VVDIndex = ListVVDContent.FindIndex(variantContent => variantContent == contentFinderCondition.TerritoryType.Value.RowId);
+                content.GCArmyContent = ListGCArmyContent.Any(gcArmyContent => gcArmyContent == contentFinderCondition.TerritoryType.Value.RowId);
+                content.GCArmyIndex = ListGCArmyContent.FindIndex(gcArmyContent => gcArmyContent == contentFinderCondition.TerritoryType.Value.RowId);
 
                 if (contentFinderCondition.ContentType.Value.RowId == 2)
                     content.DutyModes |= DutyMode.Regular;
@@ -153,7 +153,7 @@ namespace AutoDuty.Helpers
 
                 DictionaryContent.Add(contentFinderCondition.TerritoryType.Value.RowId, content);
             }
-            
+
             DictionaryContent = DictionaryContent.OrderBy(content => content.Value.ExVersion).ThenBy(content => content.Value.ClassJobLevelRequired).ThenBy(content => content.Value.TerritoryType).ToDictionary();
         }
 
@@ -165,10 +165,10 @@ namespace AutoDuty.Helpers
             if (!UIState.IsInstanceContentUnlocked(content.Id))
                 return false;
 
-            if (level < 0) 
+            if (level < 0)
                 level = PlayerHelper.GetCurrentLevelFromSheet();
 
-            if (content.ClassJobLevelRequired > level                                   ||
+            if (content.ClassJobLevelRequired > level ||
                 !ContentPathsManager.DictionaryPaths.ContainsKey(content.TerritoryType) ||
                 content.ItemLevelRequired > InventoryHelper.CurrentItemLevel)
                 return false;

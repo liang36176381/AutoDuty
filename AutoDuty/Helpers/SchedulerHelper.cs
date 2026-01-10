@@ -12,8 +12,8 @@ namespace AutoDuty.Helpers
         {
             internal List<Action> Action { get; set; } = [() => { }];
 
-            internal int TimeMS   { get; set; } = 0;
-            internal int Interval { get; set; } 
+            internal int TimeMS { get; set; } = 0;
+            internal int Interval { get; set; }
 
             internal Func<bool>? Condition { get; set; } = null;
 
@@ -59,7 +59,7 @@ namespace AutoDuty.Helpers
                 }
             }
 
-            while (_schedulesToRemove.Count !=0)
+            while (_schedulesToRemove.Count != 0)
             {
                 var schedule = _schedulesToRemove.Dequeue();
                 if (schedule.IsNullOrEmpty())

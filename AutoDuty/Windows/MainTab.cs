@@ -39,14 +39,14 @@ namespace AutoDuty.Windows
             {
                 // Set the maximum search to 10 characters
                 uint inputMaxLength = 10;
-                
+
                 // Calculate the X width of the maximum amount of search characters
                 Vector2 _characterWidth = ImGui.CalcTextSize("W");
                 float inputMaxWidth = ImGui.CalcTextSize("W").X * inputMaxLength;
-                
+
                 // Set the width of the search box to the calculated width
                 ImGui.SetNextItemWidth(inputMaxWidth);
-                
+
                 ImGui.InputTextWithHint("##search", "Search duties...", ref _searchText, inputMaxLength);
 
                 // Apply filtering based on the search text
@@ -69,17 +69,17 @@ namespace AutoDuty.Windows
                     List<ContentPathsManager.DutyPath> curPaths = container.Paths;
                     if (curPaths.Count > 1)
                     {
-                        int                              curPath       = Math.Clamp(Plugin.CurrentPath, 0, curPaths.Count - 1);
+                        int curPath = Math.Clamp(Plugin.CurrentPath, 0, curPaths.Count - 1);
 
-                        Dictionary<string, JobWithRole>? pathSelection    = null;
-                        JobWithRole                      curJob = Svc.ClientState.LocalPlayer.GetJob().JobToJobWithRole();
+                        Dictionary<string, JobWithRole>? pathSelection = null;
+                        JobWithRole curJob = Svc.ClientState.LocalPlayer.GetJob().JobToJobWithRole();
                         using (ImRaii.Disabled(curPath <= 0 ||
-                                               !Plugin.Configuration.PathSelectionsByPath.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) || 
+                                               !Plugin.Configuration.PathSelectionsByPath.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ||
                                                !(pathSelection = Plugin.Configuration.PathSelectionsByPath[Plugin.CurrentTerritoryContent.TerritoryType]).Any(kvp => kvp.Value.HasJob(Svc.ClientState.LocalPlayer.GetJob()))))
                         {
                             if (ImGui.Button("Clear Saved Path"))
                             {
-                                foreach (KeyValuePair<string, JobWithRole> keyValuePair in pathSelection) 
+                                foreach (KeyValuePair<string, JobWithRole> keyValuePair in pathSelection)
                                     pathSelection[keyValuePair.Key] &= ~curJob;
 
                                 PathSelectionHelper.RebuildDefaultPaths(Plugin.CurrentTerritoryContent.TerritoryType);
@@ -100,8 +100,8 @@ namespace AutoDuty.Windows
                                     PathSelectionHelper.AddPathSelectionEntry(Plugin.CurrentTerritoryContent!.TerritoryType);
                                     Dictionary<string, JobWithRole> pathJobs = Plugin.Configuration.PathSelectionsByPath[Plugin.CurrentTerritoryContent.TerritoryType]!;
                                     pathJobs.TryAdd(path.Value.FileName, JobWithRole.None);
-                                    
-                                    foreach (string jobsKey in pathJobs.Keys) 
+
+                                    foreach (string jobsKey in pathJobs.Keys)
                                         pathJobs[jobsKey] &= ~curJob;
 
                                     pathJobs[path.Value.FileName] |= curJob;
@@ -118,10 +118,10 @@ namespace AutoDuty.Windows
                             ImGui.EndCombo();
                         }
                         ImGui.PopItemWidth();
-                        
+
                         if (ImGui.IsItemHovered() && !curPaths[curPath].PathFile.Meta.Notes.All(x => x.IsNullOrEmpty()))
                             ImGui.SetTooltip(string.Join("\n", curPaths[curPath].PathFile.Meta.Notes));
-                        
+
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace AutoDuty.Windows
                     if (dutyMode == DutyMode.Trust && Plugin.CurrentTerritoryContent != null)
                     {
                         ImGui.Columns(3);
-                        using (ImRaii.Disabled()) 
+                        using (ImRaii.Disabled())
                             DrawTrustMembers(Plugin.CurrentTerritoryContent);
                         ImGui.Columns(1);
                         ImGui.Spacing();
@@ -298,15 +298,15 @@ namespace AutoDuty.Windows
                             }
                             ImGui.PopItemWidth();
 
-                            if (Plugin.Configuration.DutyModeEnum != DutyMode.Trust) 
+                            if (Plugin.Configuration.DutyModeEnum != DutyMode.Trust)
                                 ImGuiComponents.HelpMarker("Leveling Mode will queue you for the most CONSISTENT dungeon considering your lvl + Ilvl. \nIt will NOT always queue you for the highest level dungeon, it follows our stable dungeon list instead.");
-                            else 
+                            else
                                 ImGuiComponents.HelpMarker("TRUST Leveling Mode will queue you for the most CONSISTENT dungeon considering your lvl + Ilvl, as well as the LOWEST LEVEL trust members you have, in an attempt to level them all equally.\nIt will NOT always queue you for the highest level dungeon, it follows our stable dungeon list instead.");
                         }
 
                         if (Plugin.Configuration.DutyModeEnum == DutyMode.Support && levelingMode == LevelingMode.Support)
                         {
-                            if(ImGui.Checkbox("Prefer Trust over Support Leveling", ref Plugin.Configuration.PreferTrustOverSupportLeveling))
+                            if (ImGui.Checkbox("Prefer Trust over Support Leveling", ref Plugin.Configuration.PreferTrustOverSupportLeveling))
                                 Plugin.Configuration.Save();
                         }
 
@@ -316,7 +316,7 @@ namespace AutoDuty.Windows
                             if (DutySelected != null && DutySelected.Content.TrustMembers.Count > 0)
                             {
                                 ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined("Select your Trust Party"));
-                                
+
 
                                 TrustHelper.ResetTrustIfInvalid();
                                 for (int i = 0; i < Plugin.Configuration.SelectedTrustMembers.Length; i++)
@@ -476,9 +476,9 @@ namespace AutoDuty.Windows
         {
             foreach (TrustMember member in content.TrustMembers)
             {
-                bool       enabled        = Plugin.Configuration.SelectedTrustMembers.Where(x => x != null).Any(x => x == member.MemberName);
-                CombatRole playerRole     = Player.Job.GetCombatRole();
-                int        numberSelected = Plugin.Configuration.SelectedTrustMembers.Count(x => x != null);
+                bool enabled = Plugin.Configuration.SelectedTrustMembers.Where(x => x != null).Any(x => x == member.MemberName);
+                CombatRole playerRole = Player.Job.GetCombatRole();
+                int numberSelected = Plugin.Configuration.SelectedTrustMembers.Count(x => x != null);
 
                 TrustMember?[] members = Plugin.Configuration.SelectedTrustMembers.Select(tmn => tmn != null ? TrustHelper.Members[(TrustMemberName)tmn] : null).ToArray();
 

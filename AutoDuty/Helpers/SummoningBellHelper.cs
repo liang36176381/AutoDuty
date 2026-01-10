@@ -55,11 +55,11 @@ namespace AutoDuty.Helpers
                 963 => new(26.749023f, -0.015319824f, -53.696533f),
                 1185 => new(18.57019f, -14.023071f, 120.408936f),
                 1186 => new(-151.59845f, 0.59503174f, -15.304871f),
-                _ => Vector3.Zero 
+                _ => Vector3.Zero
             };
         }
 
-        internal static void Invoke(SummoningBellLocations summoningBellLocation) 
+        internal static void Invoke(SummoningBellLocations summoningBellLocation)
         {
             switch (Plugin.Configuration.PreferredSummoningBellEnum)
             {

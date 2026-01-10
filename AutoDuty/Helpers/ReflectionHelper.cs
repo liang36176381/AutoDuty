@@ -38,7 +38,7 @@ namespace AutoDuty.Helpers
         }
 
         internal static class RotationSolver_Reflection
-        { 
+        {
             internal static bool RotationSolverEnabled => DalamudReflector.TryGetDalamudPlugin("RotationSolver", out _, false, true);
 
             internal static bool GetState => DalamudReflector.TryGetDalamudPlugin("RotationSolver", out var pl, false, true) && (bool)Assembly.GetAssembly(pl.GetType()).GetType("RotationSolver.Commands.RSCommands").GetField("_lastState", All).GetValue(null);
@@ -119,7 +119,7 @@ namespace AutoDuty.Helpers
             private static readonly StaticBoolMethod isViperRear;
 
             public static bool IsRear() =>
-                isReaperRear()  ||
+                isReaperRear() ||
                 isSamuraiRear() ||
                 isDragoonRear() ||
                 isViperRear();
@@ -130,7 +130,7 @@ namespace AutoDuty.Helpers
             private static readonly StaticBoolMethod isViperFlank;
 
             public static bool IsFlank() =>
-                isReaperFlank()  ||
+                isReaperFlank() ||
                 isSamuraiFlank() ||
                 isDragoonFlank() ||
                 isViperFlank();
@@ -166,7 +166,7 @@ namespace AutoDuty.Helpers
 
             static Avarice_Reflection()
             {
-                
+
                 if (DalamudReflector.TryGetDalamudPlugin("Avarice", out var pl, false, true))
                 {
                     avariceReady = true;
@@ -180,15 +180,15 @@ namespace AutoDuty.Helpers
 
                     if (utilType != null)
                     {
-                        isReaperRear  = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsReaperAnticipatedRear"));
+                        isReaperRear = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsReaperAnticipatedRear"));
                         isSamuraiRear = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsSamuraiAnticipatedRear"));
                         isDragoonRear = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsDragoonAnticipatedRear"));
-                        isViperRear   = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedRear"));
+                        isViperRear = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedRear"));
 
-                        isReaperFlank  = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsReaperAnticipatedFlank"));
+                        isReaperFlank = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsReaperAnticipatedFlank"));
                         isSamuraiFlank = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsSamuraiAnticipatedFlank"));
                         isDragoonFlank = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsDragoonAnticipatedFlank"));
-                        isViperFlank   = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedFlank"));
+                        isViperFlank = MethodDelegate<StaticBoolMethod>(utilType.GetMethod("IsViperAnticipatedFlank"));
 
                         avariceReady = true;
                     }
@@ -219,7 +219,7 @@ namespace AutoDuty.Helpers
         internal static FieldRef<T, F> FieldRefAccess<T, F>(FieldInfo fieldInfo, bool needCastclass)
         {
             var delegateInstanceType = typeof(T);
-            var declaringType        = fieldInfo.DeclaringType;
+            var declaringType = fieldInfo.DeclaringType;
 
             var dm = new DynamicMethod($"__refget_{delegateInstanceType.Name}_fi_{fieldInfo.Name}",
                                        typeof(F).MakeByRefType(), [delegateInstanceType]);
@@ -260,22 +260,22 @@ namespace AutoDuty.Helpers
                     if (declaringType is { IsInterface: true } && delegateInstanceType.IsValueType)
                     {
                         InterfaceMapping interfaceMapping = delegateInstanceType.GetInterfaceMap(declaringType);
-                        method        = interfaceMapping.TargetMethods[Array.IndexOf(interfaceMapping.InterfaceMethods, method)];
+                        method = interfaceMapping.TargetMethods[Array.IndexOf(interfaceMapping.InterfaceMethods, method)];
                         declaringType = delegateInstanceType;
                     }
                 }
 
-                ParameterInfo[] parameters     = method.GetParameters();
-                int             numParameters  = parameters.Length;
-                Type[]          parameterTypes = new Type[numParameters + 1];
+                ParameterInfo[] parameters = method.GetParameters();
+                int numParameters = parameters.Length;
+                Type[] parameterTypes = new Type[numParameters + 1];
                 parameterTypes[0] = declaringType;
                 for (int i = 0; i < numParameters; i++)
                     parameterTypes[i + 1] = parameters[i].ParameterType;
 
-                Type[]        delegateArgsResolved = delegateType.GetGenericArguments();
-                Type[]        dynMethodReturn      = delegateArgsResolved.Length < parameterTypes.Length ? parameterTypes : delegateArgsResolved;
-                DynamicMethod dmd                  = new("OpenInstanceDelegate_" + method.Name, method.ReturnType, dynMethodReturn);
-                ILGenerator   ilGen                = dmd.GetILGenerator();
+                Type[] delegateArgsResolved = delegateType.GetGenericArguments();
+                Type[] dynMethodReturn = delegateArgsResolved.Length < parameterTypes.Length ? parameterTypes : delegateArgsResolved;
+                DynamicMethod dmd = new("OpenInstanceDelegate_" + method.Name, method.ReturnType, dynMethodReturn);
+                ILGenerator ilGen = dmd.GetILGenerator();
                 if (declaringType is { IsValueType: true } && delegateArgsResolved.Length > 0 && !delegateArgsResolved[0].IsByRef)
 
                     ilGen.Emit(OpCodes.Ldarga_S, 0);

@@ -69,7 +69,7 @@ namespace AutoDuty.Helpers
 
                 foreach ((TrustMemberName _, TrustMember member) in TrustHelper.Members)
                 {
-                    
+
                     if (member.Level < lvl && member.Level < member.LevelCap && member.LevelIsSet && memberTest.CanSelectMember(member, combatRole))
                         lvl = (short)member.Level;
                     Svc.Log.Debug($"Leveling Mode: Checking {member.Name} level which is {member.Level}, lowest level is now {lvl}");

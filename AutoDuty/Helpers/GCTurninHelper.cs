@@ -13,7 +13,7 @@ namespace AutoDuty.Helpers
 {
     internal class GCTurninHelper : ActiveHelperBase<GCTurninHelper>
     {
-        protected override string Name        { get; } = nameof(GCTurninHelper);
+        protected override string Name { get; } = nameof(GCTurninHelper);
         protected override string DisplayName { get; } = "GC Turnin";
 
         protected override string[] AddonsToClose { get; } = ["GrandCompanySupplyReward", "SelectYesno", "SelectString", "GrandCompanySupplyList"];
@@ -28,7 +28,7 @@ namespace AutoDuty.Helpers
                 base.Start();
         }
 
-        internal override void Stop() 
+        internal override void Stop()
         {
             this._turninStarted = false;
             GotoHelper.ForceStop();

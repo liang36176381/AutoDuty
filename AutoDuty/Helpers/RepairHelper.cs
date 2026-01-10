@@ -13,15 +13,15 @@ namespace AutoDuty.Helpers
 {
     internal class RepairHelper : ActiveHelperBase<RepairHelper>
     {
-        protected override string   Name          { get; } = nameof(RepairHelper);
-        protected override string   DisplayName   { get; } = string.Empty;
-        protected override int      TimeOut       => Plugin.Configuration.AutoRepairSelf ? 300000 : 600000;
+        protected override string Name { get; } = nameof(RepairHelper);
+        protected override string DisplayName { get; } = string.Empty;
+        protected override int TimeOut => Plugin.Configuration.AutoRepairSelf ? 300000 : 600000;
         protected override string[] AddonsToClose { get; } = ["SelectYesno", "SelectIconString", "Repair", "SelectString"];
 
-        internal override unsafe void Stop() 
+        internal override unsafe void Stop()
         {
             base.Stop();
-            _seenAddon           =  false;
+            _seenAddon = false;
             AgentModule.Instance()->GetAgentByInternalId(AgentId.Repair)->Hide();
         }
 

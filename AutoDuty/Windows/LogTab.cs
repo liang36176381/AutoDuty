@@ -88,7 +88,7 @@ namespace AutoDuty.Windows
                 ImGui.SetNextWindowSize(ImGui.GetMainViewport().Size);
                 ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.None, new(0.5f, 0.5f));
                 _imGuiWindowFlags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove;
-            }    
+            }
             if (ImGui.BeginPopupModal($"Create Issue", ref _popupOpen, _imGuiWindowFlags))
             {
                 _clearedDataAfterPopupClose = false;
@@ -104,7 +104,7 @@ namespace AutoDuty.Windows
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             if (ImGuiEx.EnumCombo("##LogEventLevel", ref Plugin.Configuration.LogEventLevel))
             {
-                if(Svc.Log.MinimumLogLevel > Plugin.Configuration.LogEventLevel)
+                if (Svc.Log.MinimumLogLevel > Plugin.Configuration.LogEventLevel)
                     Svc.Log.MinimumLogLevel = Plugin.Configuration.LogEventLevel;
                 Plugin.Configuration.Save();
             }
@@ -147,7 +147,7 @@ namespace AutoDuty.Windows
         };
 
         private static void DrawUserCodePopup()
-        { 
+        {
             if (_taskPollResponse != null && _userCode != null)
             {
                 if (_taskPollResponse.IsCompletedSuccessfully)
@@ -230,7 +230,7 @@ namespace AutoDuty.Windows
             ImGui.NewLine();
             ImGui.TextWrapped("What Happened?");
             ImGui.SameLine(0, 5);
-            ImGui.TextColored(ImGuiColors.DalamudRed, "*"); 
+            ImGui.TextColored(ImGuiColors.DalamudRed, "*");
             ImGui.TextWrapped("Also, what did you expect to happen? Please put any screenshots you can share here as well.");
             ImGui.InputTextMultiline("##WhatHappenedInput", ref _whatHappenedInput, 500, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y / 2.5f));
             ImGui.NewLine();

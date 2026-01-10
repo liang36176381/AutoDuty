@@ -12,7 +12,7 @@ namespace AutoDuty.Helpers
 {
     internal class AutoRetainerHelper : ActiveHelperBase<AutoRetainerHelper>
     {
-        protected override string Name        { get; } = nameof(AutoRetainerHelper);
+        protected override string Name { get; } = nameof(AutoRetainerHelper);
         protected override string DisplayName { get; } = "AutoRetainer";
 
         protected override int TimeOut { get; set; } = 600_000;
@@ -26,7 +26,7 @@ namespace AutoDuty.Helpers
             DebugLog("AutoRetainerHelper.Invoke");
             if (!AutoRetainer_IPCSubscriber.IsEnabled)
                 Svc.Log.Info("AutoRetainer requires a plugin, visit https://puni.sh/plugin/AutoRetainer for more info");
-            else if (State != ActionState.Running) 
+            else if (State != ActionState.Running)
                 base.Start();
         }
 
@@ -43,8 +43,8 @@ namespace AutoDuty.Helpers
             Plugin.Chat.ExecuteCommand("/autoretainer d");
         }
 
-        private bool         _autoRetainerStarted = false;
-        private bool         _autoRetainerStopped = false;
+        private bool _autoRetainerStarted = false;
+        private bool _autoRetainerStopped = false;
         private IGameObject? SummoningBellGameObject => Svc.Objects.FirstOrDefault(x => x.DataId == SummoningBellHelper.SummoningBellDataIds((uint)Plugin.Configuration.PreferredSummoningBellEnum));
 
         protected override unsafe void HelperStopUpdate(IFramework framework)
@@ -60,7 +60,7 @@ namespace AutoDuty.Helpers
                 this.CloseAddons();
             }
         }
-    
+
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {
@@ -86,7 +86,7 @@ namespace AutoDuty.Helpers
             {
                 DebugLog("AutoRetainer has Started");
                 this._autoRetainerStarted = true;
-                UpdateBaseThrottle        = 1000;
+                UpdateBaseThrottle = 1000;
                 return;
             }
             else if (this._autoRetainerStarted && !AutoRetainer_IPCSubscriber.IsBusy())
@@ -117,7 +117,7 @@ namespace AutoDuty.Helpers
                 }
                 else
                     DebugLog("Interacting with SummoningBell");
-                
+
             }
         }
     }

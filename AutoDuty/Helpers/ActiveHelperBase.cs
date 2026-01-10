@@ -17,13 +17,13 @@ namespace AutoDuty.Helpers
 
     internal interface IActiveHelper
     {
-        internal        void        StopIfRunning();
+        internal void StopIfRunning();
     }
 
     internal abstract class ActiveHelperBase<T> : IActiveHelper where T : ActiveHelperBase<T>, new()
     {
-        protected abstract string   Name          { get; }
-        protected abstract string   DisplayName   { get; }
+        protected abstract string Name { get; }
+        protected abstract string DisplayName { get; }
 
         protected virtual string[] AddonsToClose { get; } = [];
 
@@ -48,19 +48,19 @@ namespace AutoDuty.Helpers
 
         internal virtual void Start()
         {
-            if(State == ActionState.Running)
+            if (State == ActionState.Running)
             {
                 this.DebugLog(this.Name + " already running");
                 return;
             }
             this.InfoLog(this.Name + " started");
-            State         =  ActionState.Running;
+            State = ActionState.Running;
             Plugin.States |= PluginState.Other;
 
             if (!Plugin.States.HasFlag(PluginState.Looping))
                 Plugin.SetGeneralSettings(false);
 
-            if(this.TimeOut > 0)
+            if (this.TimeOut > 0)
                 SchedulerHelper.ScheduleAction($"Helper_{this.Name}_TimeOut", this.Stop, this.TimeOut);
 
             if (this.DisplayName != string.Empty)
@@ -68,7 +68,7 @@ namespace AutoDuty.Helpers
             Svc.Framework.Update += this.HelperUpdate;
         }
 
-        internal static ActionState State  = ActionState.None;
+        internal static ActionState State = ActionState.None;
 
         internal static void ForceStop()
         {
@@ -77,7 +77,7 @@ namespace AutoDuty.Helpers
 
         public void StopIfRunning()
         {
-            if(State == ActionState.Running)
+            if (State == ActionState.Running)
                 this.Stop();
         }
 
@@ -127,7 +127,7 @@ namespace AutoDuty.Helpers
             if (!this.CloseAddons())
                 return;
 
-            State         =  ActionState.None;
+            State = ActionState.None;
             Plugin.States &= ~PluginState.Other;
 
             if (!Plugin.States.HasFlag(PluginState.Looping))

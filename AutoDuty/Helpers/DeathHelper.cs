@@ -22,7 +22,7 @@ namespace AutoDuty.Helpers
             get => _deathState;
             set
             {
-                if(_deathState != value)
+                if (_deathState != value)
                     ConfigurationMain.MultiboxUtility.IsDead(value == PlayerLifeState.Dead);
 
                 if (value == PlayerLifeState.Dead)
@@ -30,7 +30,7 @@ namespace AutoDuty.Helpers
                     if (value != _deathState)
                     {
                         DebugLog("Player is Dead changing state to Dead");
-                        SchedulerHelper.ScheduleAction(nameof(OnDeath), OnDeath, 500, false); 
+                        SchedulerHelper.ScheduleAction(nameof(OnDeath), OnDeath, 500, false);
                     }
                 }
                 else if (value == PlayerLifeState.Revived)
@@ -61,19 +61,20 @@ namespace AutoDuty.Helpers
 
             if (Plugin.TaskManager.IsBusy)
                 Plugin.TaskManager.Abort();
-            
+
             if (Plugin.Configuration.DutyModeEnum.EqualsAny(DutyMode.Regular, DutyMode.Trial, DutyMode.Raid, DutyMode.Variant))
             {
                 bool yesNo = GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) && GenericHelpers.IsAddonReady(addonSelectYesno);
-                bool dead  = PartyHelper.PartyDead();
+                bool dead = PartyHelper.PartyDead();
 
                 if (dead)
                 {
-                    if(yesNo)
+                    if (yesNo)
                         AddonHelper.ClickSelectYesno();
-                    else if (!AgentRevive.Instance()->IsAddonShown()) 
+                    else if (!AgentRevive.Instance()->IsAddonShown())
                         AgentRevive.Instance()->ShowAddon();
-                } else if(yesNo && !AgentRevive.Instance()->IsAddonShown())
+                }
+                else if (yesNo && !AgentRevive.Instance()->IsAddonShown())
                 {
                     AddonHelper.ClickSelectYesno();
                 }
@@ -150,14 +151,15 @@ namespace AutoDuty.Helpers
                 SchedulerHelper.ScheduleAction("FindShortcut", FindShortcut, 500);
                 return;
             }
-            
+
             if (_gameObject == null || !_gameObject.IsTargetable)
             {
                 Svc.Log.Debug($"OnRevive: Couldn't find shortcut");
                 Plugin.Indexer = 0;
                 //Stop();
                 //return;
-            } else
+            }
+            else
                 Svc.Log.Debug("OnRevive: Found shortcut");
             Svc.Framework.Update += OnRevive;
         }
@@ -169,7 +171,7 @@ namespace AutoDuty.Helpers
                 VNavmesh_IPCSubscriber.Path_Stop();
             Plugin.Stage = Stage.Reading_Path;
             Svc.Log.Debug("DeathHelper - Player is Alive, and we are done with Revived Actions, changing state to Alive");
-            _deathState               = PlayerLifeState.Alive;
+            _deathState = PlayerLifeState.Alive;
             Plugin.SkipTreasureCoffer = false;
         }
 
@@ -182,7 +184,7 @@ namespace AutoDuty.Helpers
             if (_gameObject == null || !_gameObject.IsTargetable || (distanceToPlayer = ObjectHelper.GetDistanceToPlayer(_gameObject)) > 50)
             {
                 Svc.Log.Debug("OnRevive: Done");
-                if(Plugin.Indexer == 0) 
+                if (Plugin.Indexer == 0)
                     Plugin.Indexer = FindWaypoint();
                 Stop();
                 return;

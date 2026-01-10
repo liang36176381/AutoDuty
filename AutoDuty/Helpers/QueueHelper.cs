@@ -30,7 +30,7 @@ namespace AutoDuty.Helpers
             }
         }
 
-        protected override string Name        => nameof(QueueHelper);
+        protected override string Name => nameof(QueueHelper);
         protected override string DisplayName => $"Queueing {_dutyMode}: {_content?.Name}";
 
         internal override void Stop()
@@ -85,7 +85,7 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            if ((byte) agentDawn->SelectedContentId != _content.DawnRowId)
+            if ((byte)agentDawn->SelectedContentId != _content.DawnRowId)
             {
                 Svc.Log.Debug($"Queue Helper - Clicking: {_content.EnglishName} at {_content.RowId} with dawn {_content.DawnRowId} instead of {agentDawn->SelectedContentId}");
                 RaptureAtkModule.Instance()->OpenDawn(_content.RowId);
@@ -104,14 +104,14 @@ namespace AutoDuty.Helpers
                 if (EzThrottler.Throttle("_turnedOnConfigMembers", 500))
                 {
                     AgentDawnInterface.DawnMemberEntry* curMembers = agentDawn->Data->MemberData.GetMembers(agentDawn->Data->MemberData.CurrentMembersIndex);
-                    var                                 members    = Plugin.Configuration.SelectedTrustMembers;
+                    var members = Plugin.Configuration.SelectedTrustMembers;
                     if (members.Count(x => x is not null) == 3)
                         members.OrderBy(x => TrustHelper.Members[(TrustMemberName)x!].Role)
                                .Each(member =>
                                      {
                                          if (member != null)
                                          {
-                                             byte                               index       = TrustHelper.Members[(TrustMemberName)member].Index;
+                                             byte index = TrustHelper.Members[(TrustMemberName)member].Index;
                                              AgentDawnInterface.DawnMemberEntry memberEntry = curMembers[index];
 
                                              agentDawn->Data->PartyData.AddMember(index, &memberEntry);
@@ -121,7 +121,7 @@ namespace AutoDuty.Helpers
                     SchedulerHelper.ScheduleAction("_turnedOnConfigMembers", () => _turnedOnConfigMembers = true, 250);
                 }
             }
-            else if(EzThrottler.Throttle("ClickRegisterButton", 10000))
+            else if (EzThrottler.Throttle("ClickRegisterButton", 10000))
             {
                 Svc.Log.Debug($"Queue Helper - Clicking: Register For Duty");
                 agentDawn->RegisterForDuty();
@@ -134,7 +134,7 @@ namespace AutoDuty.Helpers
             if (!agentDawnStory->IsAddonReady())
             {
                 if (!EzThrottler.Throttle("OpenDawnStory", 5000) || !AgentHUD.Instance()->IsMainCommandEnabled(91)) return;
-                
+
                 Svc.Log.Debug("Queue Helper - Opening DawnStory");
                 RaptureAtkModule.Instance()->OpenDawnStory(_content.Id);
                 return;
@@ -153,7 +153,7 @@ namespace AutoDuty.Helpers
 
                 RaptureAtkModule.Instance()->OpenDawnStory(_content.RowId);
             }
-            else if(EzThrottler.Throttle("ClickRegisterButton", 10000))
+            else if (EzThrottler.Throttle("ClickRegisterButton", 10000))
             {
                 Svc.Log.Debug($"Queue Helper - Clicking: Register For Duty");
                 AgentDawnStory.Instance()->RegisterForDuty();
@@ -181,12 +181,12 @@ namespace AutoDuty.Helpers
 
             if (_addonContentsFinder->DutyList->Items.LongCount == 0)
                 return;
-            
+
             var vectorDutyListItems = _addonContentsFinder->DutyList->Items;
             List<AtkComponentTreeListItem> listAtkComponentTreeListItems = [];
             if (vectorDutyListItems.Count == 0)
                 return;
-            
+
             vectorDutyListItems.ForEach(pointAtkComponentTreeListItem => listAtkComponentTreeListItems.Add(*(pointAtkComponentTreeListItem.Value)));
 
             if (!_allConditionsMetToJoin && AgentContentsFinder.Instance()->SelectedDutyId != _content!.ContentFinderCondition)
@@ -227,7 +227,7 @@ namespace AutoDuty.Helpers
             if (_content == null || Plugin.InDungeon || Svc.ClientState.TerritoryType == _content?.TerritoryType)
                 Stop();
 
-            if (!EzThrottler.Throttle("QueueHelper", 250)|| !PlayerHelper.IsReadyFull || ContentsFinderConfirm() || Conditions.Instance()->InDutyQueue) return;
+            if (!EzThrottler.Throttle("QueueHelper", 250) || !PlayerHelper.IsReadyFull || ContentsFinderConfirm() || Conditions.Instance()->InDutyQueue) return;
 
             switch (_dutyMode)
             {
@@ -275,7 +275,7 @@ namespace AutoDuty.Helpers
         private static void SelectDuty(AddonContentsFinder* addonContentsFinder)
         {
             if (addonContentsFinder == null) return;
-            
+
             var vectorDutyListItems = addonContentsFinder->DutyList->Items;
             List<AtkComponentTreeListItem> listAtkComponentTreeListItems = [];
             vectorDutyListItems.ForEach(pointAtkComponentTreeListItem => listAtkComponentTreeListItems.Add(*(pointAtkComponentTreeListItem.Value)));

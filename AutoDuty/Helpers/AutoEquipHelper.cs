@@ -17,12 +17,12 @@ namespace AutoDuty.Helpers
         {
             if (Plugin.Configuration.AutoEquipRecommendedGearGearsetter && Gearsetter_IPCSubscriber.IsEnabled)
             {
-                this.TimeOut    = 5000;
+                this.TimeOut = 5000;
                 this.gearsetter = true;
             }
             else
             {
-                this.TimeOut    = 2000;
+                this.TimeOut = 2000;
                 this.gearsetter = false;
             }
             base.Start();
@@ -30,15 +30,15 @@ namespace AutoDuty.Helpers
 
         private bool gearsetter;
 
-        protected override string Name        => nameof(AutoEquipHelper);
+        protected override string Name => nameof(AutoEquipHelper);
         protected override string DisplayName => "Auto Equip";
 
         protected override int TimeOut { get; set; }
 
 
-        protected override void     HelperUpdate(IFramework framework)
+        protected override void HelperUpdate(IFramework framework)
         {
-            if(this.gearsetter)
+            if (this.gearsetter)
                 this.AutoEquipGearSetterUpdate(framework);
             else
                 this.AutoEquipUpdate(framework);
@@ -50,22 +50,22 @@ namespace AutoDuty.Helpers
 
             RaptureGearsetModule.Instance()->UpdateGearset(RaptureGearsetModule.Instance()->CurrentGearsetIndex);
             this._statesExecuted = AutoEquipState.None;
-            this._index          = 0;
-            this._gearset        = null;
+            this._index = 0;
+            this._gearset = null;
             PortraitHelper.Invoke();
         }
 
         [Flags]
         enum AutoEquipState : int
         {
-            None                                  = 0,
-            Setting_Up                            = 1 << 0,
-            Equipping                             = 1 << 1,
-            Updating_Gearset                      = 1 << 2,
-            Getting_Recommended_Gear              = 1 << 3,
-            Recommended_Gear_Need_Second_Pass     = 1 << 4,
-            Updating_Gearset_Second_Pass          = 1 << 5,
-            Getting_Recommended_Gear_Second_Pass  = 1 << 6,
+            None = 0,
+            Setting_Up = 1 << 0,
+            Equipping = 1 << 1,
+            Updating_Gearset = 1 << 2,
+            Getting_Recommended_Gear = 1 << 3,
+            Recommended_Gear_Need_Second_Pass = 1 << 4,
+            Updating_Gearset_Second_Pass = 1 << 5,
+            Getting_Recommended_Gear_Second_Pass = 1 << 6,
         }
 
         private AutoEquipState _statesExecuted = AutoEquipState.None;
@@ -76,7 +76,7 @@ namespace AutoDuty.Helpers
                 return;
 
             if (RecommendEquipModule.Instance()->IsUpdating)
-                    return;
+                return;
 
             if (!this._statesExecuted.HasFlag(AutoEquipState.Setting_Up))
             {
@@ -97,8 +97,8 @@ namespace AutoDuty.Helpers
             }
         }
 
-        private List<(uint ItemId, InventoryType? SourceInventory, byte? SourceInventorySlot, RaptureGearsetModule.GearsetItemIndex TargetSlot)>? _gearset           = null;
-        private int                                                                                                                               _index             = 0;
+        private List<(uint ItemId, InventoryType? SourceInventory, byte? SourceInventorySlot, RaptureGearsetModule.GearsetItemIndex TargetSlot)>? _gearset = null;
+        private int _index = 0;
 
         private void AutoEquipGearSetterUpdate(IFramework framework)
         {
@@ -117,7 +117,7 @@ namespace AutoDuty.Helpers
             else if (!this._statesExecuted.HasFlag(AutoEquipState.Getting_Recommended_Gear))
             {
                 DebugLog($"Gearsetter_IPCSubscriber - GetRecommendationsForGearset");
-                this._gearset     =  Gearsetter_IPCSubscriber.GetRecommendationsForGearset((byte)RaptureGearsetModule.Instance()->CurrentGearsetIndex);
+                this._gearset = Gearsetter_IPCSubscriber.GetRecommendationsForGearset((byte)RaptureGearsetModule.Instance()->CurrentGearsetIndex);
                 this._statesExecuted |= AutoEquipState.Getting_Recommended_Gear;
             }
             else if (this._gearset != null && this._index < this._gearset.Count)
@@ -187,8 +187,8 @@ namespace AutoDuty.Helpers
             else if (this._statesExecuted.HasFlag(AutoEquipState.Recommended_Gear_Need_Second_Pass) && !this._statesExecuted.HasFlag(AutoEquipState.Getting_Recommended_Gear_Second_Pass))
             {
                 DebugLog($"Gearsetter_IPCSubscriber - GetRecommendationsForGearset");
-                this._gearset     =  Gearsetter_IPCSubscriber.GetRecommendationsForGearset((byte)RaptureGearsetModule.Instance()->CurrentGearsetIndex);
-                this._index       = 0;
+                this._gearset = Gearsetter_IPCSubscriber.GetRecommendationsForGearset((byte)RaptureGearsetModule.Instance()->CurrentGearsetIndex);
+                this._index = 0;
                 this._statesExecuted |= AutoEquipState.Getting_Recommended_Gear_Second_Pass;
             }
             else

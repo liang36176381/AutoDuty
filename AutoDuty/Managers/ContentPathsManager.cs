@@ -27,10 +27,10 @@ namespace AutoDuty.Managers
             public ContentPathContainer(Content content)
             {
                 Content = content;
-                id      = content.TerritoryType;
+                id = content.TerritoryType;
 
                 ColoredNameString = $"({ImGuiHelper.idColor}{this.id}</>) {ImGuiHelper.dutyColor}{this.Content!.Name}</>";
-                ColoredNameRegex  = RegexHelper.ColoredTextRegex().Match(this.ColoredNameString);
+                ColoredNameRegex = RegexHelper.ColoredTextRegex().Match(this.ColoredNameString);
             }
 
             public uint id { get; }
@@ -103,9 +103,9 @@ namespace AutoDuty.Managers
         {
             public DutyPath(string filePath, ContentPathContainer container)
             {
-                FilePath  = filePath;
-                FileName  = Path.GetFileName(filePath);
-                Name      = FileName.Replace(".json", string.Empty);
+                FilePath = filePath;
+                FileName = Path.GetFileName(filePath);
+                Name = FileName.Replace(".json", string.Empty);
                 this.container = container;
 
 
@@ -128,13 +128,13 @@ namespace AutoDuty.Managers
 
             public uint id;
 
-            public string Name     { get; }
+            public string Name { get; }
             public string FileName { get; }
             public string FilePath { get; }
 
-            public  string ColoredNameString { get; private set; } = null!;
+            public string ColoredNameString { get; private set; } = null!;
 
-            public  Match ColoredNameRegex { get; private set; } = null!;
+            public Match ColoredNameRegex { get; private set; } = null!;
 
             private PathFile? pathFile = null;
             public PathFile PathFile
@@ -146,7 +146,7 @@ namespace AutoDuty.Managers
                         try
                         {
                             RevivalFound = false;
-                            W2WFound     = false;
+                            W2WFound = false;
 
                             string json;
 
@@ -157,8 +157,8 @@ namespace AutoDuty.Managers
                             pathFile = JsonSerializer.Deserialize<PathFile>(json, BuildTab.jsonSerializerOptions);
 
                             RevivalFound = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
-                            W2WFound     = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
-                            
+                            W2WFound = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
+
                             /*
                             if (this.pathFile.Meta.LastUpdatedVersion < 189)
                             {
@@ -184,15 +184,15 @@ namespace AutoDuty.Managers
                 }
             }
 
-            public List<PathAction> Actions      => PathFile.Actions;
-            public bool             RevivalFound { get; private set; }
-            public bool             W2WFound { get; private set; }
+            public List<PathAction> Actions => PathFile.Actions;
+            public bool RevivalFound { get; private set; }
+            public bool W2WFound { get; private set; }
         }
     }
 
     internal static class ContentPathContainerExtensions
     {
-        public static bool IsFirstPath(this ContentPathsManager.ContentPathContainer container, ContentPathsManager.DutyPath dp) => 
+        public static bool IsFirstPath(this ContentPathsManager.ContentPathContainer container, ContentPathsManager.DutyPath dp) =>
             container.Paths[0] == dp;
     }
 }

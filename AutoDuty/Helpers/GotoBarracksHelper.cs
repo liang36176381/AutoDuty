@@ -12,18 +12,18 @@ namespace AutoDuty.Helpers
 
     internal class GotoBarracksHelper : ActiveHelperBase<GotoBarracksHelper>
     {
-        protected override string Name        => nameof(GotoBarracksHelper);
+        protected override string Name => nameof(GotoBarracksHelper);
         protected override string DisplayName => string.Empty;
 
         protected override string[] AddonsToClose { get; } = ["SelectYesno"];
 
         internal override void Start()
         {
-            if (Svc.ClientState.TerritoryType != BarracksTerritoryType(PlayerHelper.GetGrandCompany())) 
+            if (Svc.ClientState.TerritoryType != BarracksTerritoryType(PlayerHelper.GetGrandCompany()))
                 base.Start();
         }
 
-        internal override void Stop() 
+        internal override void Stop()
         {
             GotoHelper.ForceStop();
             base.Stop();

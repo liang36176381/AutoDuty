@@ -31,7 +31,7 @@ public unsafe class Overlay : Window
             return;
         }
 
-        if(!Plugin.Configuration.ShowOverlay)
+        if (!Plugin.Configuration.ShowOverlay)
         {
             this.IsOpen = false;
             return;
@@ -88,7 +88,7 @@ public unsafe class Overlay : Window
             ImGui.SameLine();
             if (ImGuiEx.IconButton($"\uf013##Config", "OpenAutoDuty"))
                 Plugin.MainWindow.IsOpen = !Plugin.MainWindow.IsOpen;
-            
+
 
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.WindowClose, "CloseOverlay"))

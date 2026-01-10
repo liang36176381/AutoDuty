@@ -21,8 +21,8 @@ namespace AutoDuty.Helpers
             {
                 Callback.Fire(addonPtr, boolValue, args);
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Svc.Log.Error($"{ex}");
             }
         }
@@ -95,17 +95,17 @@ namespace AutoDuty.Helpers
 
             if (!addonChecker && seenAddon)
                 new AddonMaster.Talk(addon).Click();
-            
+
             if (addonChecker && seenAddon)
                 return true;
-                    
+
             return false;
         }
 
         private static bool AddonChecker(string addonName, out AtkUnitBase* outAddon, out bool outSeenAddon)
         {
             outSeenAddon = false;
-            
+
             var gotAddon = GenericHelpers.TryGetAddonByName(addonName, out outAddon);
             var addonReady = gotAddon && GenericHelpers.IsAddonReady(outAddon);
 

@@ -16,7 +16,7 @@ namespace AutoDuty.Helpers
     internal static class MapHelper
     {
         internal static unsafe bool IsFlagMarkerSet => AgentMap.Instance()->IsFlagMarkerSet;
-        
+
         internal static unsafe FlagMapMarker GetFlagMarker => AgentMap.Instance()->FlagMapMarker;
 
         internal static Vector2 ConvertWorldXZToMap(Vector2 coords, Map map) => Dalamud.Utility.MapUtil.WorldToMap(coords, map.OffsetX, map.OffsetY, map.SizeFactor);
@@ -37,7 +37,7 @@ namespace AutoDuty.Helpers
 
             foreach (var aetheryte in aetherytes)
             {
-                if (( aetheryte.IsAetheryte && aetheryte.Territory.RowId != territoryType ) || aetheryte.Territory.ValueNullable == null || aetheryte.Territory.Value.RowId != territoryType) continue;
+                if ((aetheryte.IsAetheryte && aetheryte.Territory.RowId != territoryType) || aetheryte.Territory.ValueNullable == null || aetheryte.Territory.Value.RowId != territoryType) continue;
                 MapMarker mapMarker = Svc.Data.GetSubrowExcelSheet<MapMarker>().AllRows().FirstOrDefault(m => m.DataType == 4 && m.DataKey.RowId == aetheryte.AethernetName.RowId);
 
                 if (mapMarker.RowId > 0)
@@ -46,7 +46,7 @@ namespace AutoDuty.Helpers
 
                     if (distance < closestDistance)
                     {
-                        closestDistance  = distance;
+                        closestDistance = distance;
                         closestAetheryte = aetheryte;
                     }
                 }

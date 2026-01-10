@@ -16,9 +16,9 @@ namespace AutoDuty.Helpers
 
     internal class TripleTriadCardUseHelper : ActiveHelperBase<TripleTriadCardUseHelper>
     {
-        protected override string Name        { get; } = nameof(TripleTriadCardUseHelper);
+        protected override string Name { get; } = nameof(TripleTriadCardUseHelper);
         protected override string DisplayName { get; } = "Registering Cards";
-        
+
         protected override unsafe void HelperUpdate(IFramework framework)
         {
             if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.InDungeon)
@@ -26,7 +26,7 @@ namespace AutoDuty.Helpers
 
             if (!EzThrottler.Throttle("CardsRegister", 250))
                 return;
-            
+
             if (Conditions.Instance()->Mounted)
             {
                 ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
@@ -42,7 +42,7 @@ namespace AutoDuty.Helpers
                                                                .Where(iv =>
                                                                {
                                                                    Item? excelItem = InventoryHelper.GetExcelItem(iv.ItemId);
-                                                                   return excelItem is { ItemUICategory.RowId: 86 } && !UIState.Instance()->IsTripleTriadCardUnlocked((ushort) excelItem.Value.AdditionalData.RowId);
+                                                                   return excelItem is { ItemUICategory.RowId: 86 } && !UIState.Instance()->IsTripleTriadCardUnlocked((ushort)excelItem.Value.AdditionalData.RowId);
                                                                });
 
 

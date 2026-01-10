@@ -35,7 +35,7 @@ public class MainWindow : Window, IDisposable
             MinimumSize = new Vector2(10, 10),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
-        
+
         TitleBarButtons.Add(new() { Icon = FontAwesomeIcon.Cog, IconOffset = new(1, 1), Click = _ => OpenTab("Config") });
         TitleBarButtons.Add(new() { ShowTooltip = () => ImGui.SetTooltip("Support Herculezz on Ko-fi"), Icon = FontAwesomeIcon.Heart, IconOffset = new(1, 1), Click = _ => GenericHelpers.ShellStart("https://ko-fi.com/Herculezz") });
     }
@@ -105,11 +105,11 @@ public class MainWindow : Window, IDisposable
 
     internal static void GotoAndActions()
     {
-        if(Plugin.States.HasFlag(PluginState.Other))
+        if (Plugin.States.HasFlag(PluginState.Other))
         {
-            if(ImGui.Button("Stop"))
+            if (ImGui.Button("Stop"))
                 Plugin.Stage = Stage.Stopped;
-            ImGui.SameLine(0,5);
+            ImGui.SameLine(0, 5);
         }
 
         using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping) || Plugin.States.HasFlag(PluginState.Navigating)))
@@ -247,7 +247,7 @@ public class MainWindow : Window, IDisposable
                     }
                 }
             }
-            
+
             ImGui.SameLine(0, 5);
             using (ImRaii.Disabled(!Plugin.Configuration.AutoRepair && !Plugin.Configuration.OverrideOverlayButtons || !Plugin.Configuration.RepairButton))
             {
@@ -265,12 +265,12 @@ public class MainWindow : Window, IDisposable
                             if (InventoryHelper.CanRepair(100))
                                 RepairHelper.Invoke();
                             //else
-                                //ShowPopup("", "");
+                            //ShowPopup("", "");
                         }
                         //if ()
-                            ToolTip("Click to Repair");
+                        ToolTip("Click to Repair");
                         //else
-                            //ToolTip("");
+                        //ToolTip("");
                     }
                 }
             }
@@ -313,7 +313,7 @@ public class MainWindow : Window, IDisposable
                     }
                     else
                     {
-                        if (ImGui.Button("Coffers")) 
+                        if (ImGui.Button("Coffers"))
                             CofferHelper.Invoke();
                         ToolTip("Click to open coffers");
                     }
@@ -342,7 +342,7 @@ public class MainWindow : Window, IDisposable
             {
                 if (ImGui.Selectable("Register TT Cards"))
                     TripleTriadCardUseHelper.Invoke();
-                if (ImGui.Selectable("Sell TT Cards")) 
+                if (ImGui.Selectable("Sell TT Cards"))
                     TripleTriadCardSellHelper.Invoke();
                 ImGui.EndPopup();
             }
@@ -434,12 +434,12 @@ public class MainWindow : Window, IDisposable
             }
             if (ImGuiEx.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
-                if (x.color != null) 
+                if (x.color != null)
                     ImGui.PopStyleColor();
-                if (x.child) 
+                if (x.child)
                     ImGui.BeginChild(x.name + "child");
                 x.function();
-                if (x.child) 
+                if (x.child)
                     ImGui.EndChild();
                 ImGui.EndTabItem();
             }
@@ -463,7 +463,7 @@ public class MainWindow : Window, IDisposable
     {
         DrawPopup();
 
-        if(DalamudInfoHelper.IsOnStaging())
+        if (DalamudInfoHelper.IsOnStaging())
         {
             ImGui.TextColored(GradientColor.Get(ImGuiHelper.ExperimentalColor, ImGuiHelper.ExperimentalColor2, 500), "NOT SUPPORTED ON STAGING.");
             ImGui.Text("Please type in \"/xlbranch\" and pick Release, then restart the game.");

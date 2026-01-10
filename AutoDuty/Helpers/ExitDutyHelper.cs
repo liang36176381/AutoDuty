@@ -8,7 +8,7 @@ namespace AutoDuty.Helpers
 {
     internal class ExitDutyHelper : ActiveHelperBase<ExitDutyHelper>
     {
-        protected override string Name        => nameof(ExitDutyHelper);
+        protected override string Name => nameof(ExitDutyHelper);
         protected override string DisplayName => "Exiting Duty";
 
         protected override int TimeOut { get; set; } = 60_000;

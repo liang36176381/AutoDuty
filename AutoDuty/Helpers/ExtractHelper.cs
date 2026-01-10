@@ -10,7 +10,7 @@ namespace AutoDuty.Helpers
 {
     internal class ExtractHelper : ActiveHelperBase<ExtractHelper>
     {
-        protected override string Name        => nameof(ExtractHelper);
+        protected override string Name => nameof(ExtractHelper);
         protected override string DisplayName => "Extracting Materia";
 
         protected override string[] AddonsToClose { get; } = ["Materialize", "MaterializeDialog", "SelectYesno", "SelectString"];

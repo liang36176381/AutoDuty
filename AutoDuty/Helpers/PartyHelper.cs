@@ -57,7 +57,7 @@ namespace AutoDuty.Helpers
 
 
         private static DateTime partyCombatCheckTime = DateTime.Now;
-        private static bool     partyInCombat;
+        private static bool partyInCombat;
 
         private static readonly TimeSpan partyCombatCheckInterval = TimeSpan.FromMilliseconds(500);
 
@@ -82,8 +82,8 @@ namespace AutoDuty.Helpers
             return partyInCombat;
         }
 
-        private const  byte     DEAD_THRESHOLD      = 5;
-        private static byte     deadCounter         = 0;
+        private const byte DEAD_THRESHOLD = 5;
+        private static byte deadCounter = 0;
         private static DateTime partyDeathCheckTime = DateTime.Now;
 
         private static readonly TimeSpan partyDeathCheckInterval = TimeSpan.FromMilliseconds(500);
@@ -94,7 +94,7 @@ namespace AutoDuty.Helpers
                 return deadCounter >= DEAD_THRESHOLD;
 
             List<IBattleChara> members = GetPartyMembers();
-            bool               dead    = members.TrueForAll(x => x.Struct()->IsDead());
+            bool dead = members.TrueForAll(x => x.Struct()->IsDead());
 
             if (dead)
             {

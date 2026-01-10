@@ -79,12 +79,12 @@ namespace AutoDuty.Helpers
             {
                 var gameObject = Svc.Objects.FirstOrDefault(x => x.EntityId == buddy.EntityId);
 
-                if (gameObject == null) 
+                if (gameObject == null)
                     continue;
 
                 var classJob = ((ICharacter)gameObject).ClassJob.ValueNullable;
 
-                if (classJob == null) 
+                if (classJob == null)
                     continue;
 
                 if (classJob.Value.GetJobRole().ToString().Contains(role, StringComparison.InvariantCultureIgnoreCase))
@@ -118,9 +118,9 @@ namespace AutoDuty.Helpers
         {
             try
             {
-                if (gameObject == null || !gameObject.IsTargetable) 
+                if (gameObject == null || !gameObject.IsTargetable)
                     return;
-                if (face) 
+                if (face)
                     Plugin.OverrideCamera.Face(gameObject.Position);
                 var gameObjectPointer = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
                 TargetSystem.Instance()->InteractWithObject(gameObjectPointer, false);
@@ -137,7 +137,7 @@ namespace AutoDuty.Helpers
 
             if (EzThrottler.Throttle("InteractWithObjectUntilAddon"))
                 InteractWithObject(gameObject);
-            
+
             return null;
         }
 
@@ -148,7 +148,7 @@ namespace AutoDuty.Helpers
 
             if (EzThrottler.Throttle("InteractWithObjectUntilNotValid"))
                 InteractWithObject(gameObject);
-            
+
             return false;
         }
 

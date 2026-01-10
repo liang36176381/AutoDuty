@@ -16,10 +16,10 @@ namespace AutoDuty.Helpers
 
     internal unsafe static class InventoryHelper
     {
-        internal static InventoryType[] Bag       => [InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4];
-        internal static uint            SlotsFree => InventoryManager.Instance()->GetEmptySlotsInBag();
-        internal static uint            MySeals   => InventoryManager.Instance()->GetCompanySeals(PlayerState.Instance()->GrandCompany);
-        internal static uint            MaxSeals  => InventoryManager.Instance()->GetMaxCompanySeals(PlayerState.Instance()->GrandCompany);
+        internal static InventoryType[] Bag => [InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4];
+        internal static uint SlotsFree => InventoryManager.Instance()->GetEmptySlotsInBag();
+        internal static uint MySeals => InventoryManager.Instance()->GetCompanySeals(PlayerState.Instance()->GrandCompany);
+        internal static uint MaxSeals => InventoryManager.Instance()->GetMaxCompanySeals(PlayerState.Instance()->GrandCompany);
 
         internal static int ItemCount(uint itemId) => InventoryManager.Instance()->GetInventoryItemCount(itemId);
 
@@ -96,7 +96,7 @@ namespace AutoDuty.Helpers
             foreach (InventoryType type in types)
             {
                 ushort slot = GetFirstAvailableSlot(type);
-                if(slot > 0)
+                if (slot > 0)
                     return (type, slot);
             }
 
@@ -133,7 +133,7 @@ namespace AutoDuty.Helpers
                 return 0;
             }
         }*/
-        
+
 
         /*internal static uint CurrentItemLevelCalc()
         {
@@ -196,13 +196,13 @@ namespace AutoDuty.Helpers
             foreach (InventoryType type in types)
             {
                 InventoryContainer container = *InventoryManager.Instance()->GetInventoryContainer(type);
-                if(container.IsLoaded)
+                if (container.IsLoaded)
                 {
-                    for (uint i = 0; i < container.Size; i++) 
+                    for (uint i = 0; i < container.Size; i++)
                         items = items.Append(container.Items[i]);
                 }
             }
-            
+
             return items.Where(item => item.ItemId > 0);
         }
 

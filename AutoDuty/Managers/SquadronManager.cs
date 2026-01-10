@@ -38,19 +38,19 @@ namespace AutoDuty.Managers
 
             //Defining the GUI for the squadron duty finder
             _taskManager.Enqueue(() => addon = (AtkUnitBase*)Svc.GameGui.GetAddonByName("GcArmyCapture"), "RegisterSquadron");
-            
+
             // Run logic to open the squadron duty finder
             _taskManager.Enqueue(() => OpenSquadron(addon), "RegisterSquadron");
 
             // Check if we're viewing missions to select (dungeons)
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("GcArmyCapture", out addon) && GenericHelpers.IsAddonReady(addon), "RegisterSquadron");
-            
+
             // Select Mission
             _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 11, content.GCArmyIndex), "RegisterSquadron");
 
             // click ok
             _taskManager.Enqueue(() => AddonHelper.FireCallBack(addon, true, 13), "RegisterSquadron");
-            
+
             // retrieve the ContentsFinderConfirm addon
             _taskManager.Enqueue(() => GenericHelpers.TryGetAddonByName("ContentsFinderConfirm", out addon) && GenericHelpers.IsAddonReady(addon), "RegisterSquadron");
 
@@ -60,7 +60,8 @@ namespace AutoDuty.Managers
             // Check if we're in a valid map for the dungeon / paths
             _taskManager.Enqueue(() => Svc.ClientState.TerritoryType == content.TerritoryType, int.MaxValue, "RegisterSquadron");
 
-            _taskManager.Enqueue(() => {
+            _taskManager.Enqueue(() =>
+            {
                 if (Svc.ClientState.TerritoryType == content.TerritoryType)
                 {
                     // Reset states because we queued the correct duty, this is for looping
@@ -73,7 +74,7 @@ namespace AutoDuty.Managers
                 return false; // Return false if we are not in correct duty
             }, "RegisterSquadron");
         }
-        
+
 
         // Try to open the squadron menu by finding the squadron manager until specific GUI window checks are passed
         internal unsafe bool OpenSquadron(AtkUnitBase* aub)
@@ -146,7 +147,7 @@ namespace AutoDuty.Managers
                 {
                     InteractedWithSergeant = true;
                 }
-                    
+
                 return false;
             }
 
