@@ -56,7 +56,8 @@
     },
     "LevelingModes": {
       "None": "無",
-      "Auto": "自動"
+      "Support": "自動",
+      "Trust": "自動"
     }
   }
 }

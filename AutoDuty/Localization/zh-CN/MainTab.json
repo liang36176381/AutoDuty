@@ -58,7 +58,8 @@
     },
     "LevelingModes": {
       "None": "不开启",
-      "Auto": "自动排队"
+      "Support": "自动排队",
+      "Trust": "自动排队"
     }
   }
 }
