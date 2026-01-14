@@ -325,13 +325,13 @@ namespace AutoDuty.Windows
                                 if (Plugin.LevelingEnabled)
                                 {
                                     bool experimentalEntries = Plugin.Configuration.LevelingListExperimentalEntries;
-                                    if (ImGui.Checkbox("Include Testing/Unstable Dungeons", ref experimentalEntries))
+                                    if (ImGui.Checkbox(Loc.Get("MainTab.ExperimentalMap"), ref experimentalEntries))
                                     {
                                         Plugin.Configuration.LevelingListExperimentalEntries = experimentalEntries;
                                         Plugin.Configuration.Save();
                                     }
 
-                                    ImGuiEx.HelpMarker(Loc.Get("MainTab.ExperimentalMap"));
+                                    ImGuiEx.HelpMarker(Loc.Get("MainTab.ExperimentalMapHelp"));
                                 }
                             }
                             else
