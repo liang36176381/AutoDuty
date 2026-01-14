@@ -388,7 +388,7 @@ namespace AutoDuty.Windows
                                 ImGui.NextColumn();
                                 ImGui.Columns(1, null, true);
                             }
-                            else if (ImGui.Button("Refresh trust member levels"))
+                            else if (ImGui.Button(Loc.Get("MainTab.RefreshTrustLevels")))
                             {
                                 if (InventoryHelper.CurrentItemLevel < 370)
                                     Plugin.LevelingModeEnum = LevelingMode.None;
