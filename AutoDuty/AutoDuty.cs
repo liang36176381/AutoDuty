@@ -276,29 +276,28 @@ public sealed class AutoDuty : IDalamudPlugin
             Svc.Commands.AddHandler("/ad", new CommandInfo(OnCommand) { });
             Svc.Commands.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
-                HelpMessage = "\n/autoduty or /ad -> opens main window\n" +
-                "/autoduty or /ad config or cfg -> opens config window / modifies config\n" +
-                "/autoduty or /ad start -> starts autoduty when in a Duty\n" +
-                "/autoduty or /ad stop -> stops everything\n" +
-                "/autoduty or /ad pause -> pause route\n" +
-                "/autoduty or /ad resume -> resume route\n" +
-                "/autoduty or /ad turnin -> GC Turnin\n" +
-                "/autoduty or /ad desynth -> Desynth's your inventory\n" +
-                "/autoduty or /ad repair -> Repairs your gear\n" +
-                "/autoduty or /ad equiprec-> Equips recommended gear\n" +
-                "/autoduty or /ad extract -> Extract's materia from equipment\n" +
-                "/autoduty or /ad turnin -> GC Turnin\n" +
-                "/autoduty or /ad goto -> goes to\n" +
-                "/autoduty or /ad dataid -> Logs and copies your target's dataid to clipboard\n" +
-                "/autoduty or /ad exitduty -> exits duty\n" +
-                "/autoduty or /ad queue -> queues duty\n" +
-                "/autoduty or /ad moveto -> move's to territorytype and location sent\n" +
+                HelpMessage = "\n/autoduty or /ad -> 打開主視窗\n" +
+                "/autoduty or /ad config or cfg -> 打開設定視窗/修改設定\n" +
+                "/autoduty or /ad start -> 在副本中啟動AutoDuty\n" +
+                "/autoduty or /ad stop -> 停止所有操作\n" +
+                "/autoduty or /ad pause -> 暫停路線\n" +
+                "/autoduty or /ad resume -> 恢復路線\n" +
+                "/autoduty or /ad turnin -> 交軍票\n" +
+                "/autoduty or /ad desynth -> 分解背包物品\n" +
+                "/autoduty or /ad repair -> 修理裝備\n" +
+                "/autoduty or /ad equiprec-> 裝備推薦裝備\n" +
+                "/autoduty or /ad extract -> 精煉魔晶石\n" +
+                "/autoduty or /ad goto -> 前往指定位置\n" +
+                "/autoduty or /ad dataid -> 記錄並複製目標的數據ID到剪貼版\n" +
+                "/autoduty or /ad exitduty -> 退出副本\n" +
+                "/autoduty or /ad queue -> 排本\n" +
+                "/autoduty or /ad moveto -> 移動到指定區域和座標\n" +
                 "/autoduty or /ad overlay -> opens overlay\n" +
                 "/autoduty or /ad overlay lock-> toggles locking the overlay\n" +
                 "/autoduty or /ad overlay nobg-> toggles the overlay's background\n" +
-                "/autoduty or /ad movetoflag -> moves to the flag map marker\n" +
-                "/autoduty or /ad run -> starts auto duty in territory type specified\n" +
-                "/autoduty or /ad tt -> logs and copies to clipboard the Territory Type number for duty specified\n"
+                "/autoduty or /ad movetoflag -> 移動到地圖標記\n" +
+                "/autoduty or /ad run -> 在指定區域啟動 AutoDuty\n" +
+                "/autoduty or /ad tt -> 記錄並複製指定副本的區域類型編號到剪貼版\n"
             });
 
             PluginInterface.UiBuilder.Draw += DrawUI;
